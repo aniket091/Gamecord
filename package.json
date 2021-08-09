@@ -9,7 +9,9 @@
   "author": "Aniket#0729",
   "license": "GPL-3.0",
   "dependencies": {
-    "discord.js": "^13.0.1"
+    "discord.js": "^13.0.1",
+    "html-entities": "^2.3.2",
+    "node-fetch": "^2.6.1"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,8 @@
   "keywords": [
     "gamecord",
     "discord-games",
-    "minigames"
+    "minigames",
+    "discord-gamecord"
   ],
   "bugs": {
     "url": "https://github.com/aniket091/Gamecord/issues"
