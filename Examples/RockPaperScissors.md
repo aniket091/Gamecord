@@ -13,8 +13,8 @@ new RockPaperScissors({
     },
     buttons: {
       rock: 'Rock',
-  	  paper: 'Paper',
-  	  scissors: 'Scissors',
+	  paper: 'Paper',
+	  scissors: 'Scissors',
     },
     othersMessage: 'You are not allowed to use buttons for this message!',
     chooseMessage: 'You choose {emoji}!',

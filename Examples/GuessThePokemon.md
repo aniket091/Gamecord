@@ -10,10 +10,6 @@ new Connect4({
       footer: 'You have only 1 chance',
       color: '#5865F2',
     },
-    emojis: {
-      player1: '🔵',
-      player2: '🟡'
-    },
     time: 60000,
     othersMessage: 'You are not allowed to use buttons for this message!',
     winMessage: 'Your guess was correct! The pokemon was **{pokemon}**',

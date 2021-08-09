@@ -1,4 +1,4 @@
-# Tic Tac Toe
+# 🧩 Tic Tac Toe
 
 ```js
 const { TicTacToe } = require('discord-gamecord')
