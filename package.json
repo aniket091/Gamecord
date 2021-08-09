@@ -1,0 +1,30 @@
+{
+  "name": "discord-gamecord",
+  "version": "1.1.0",
+  "description": "Discord Gamecord is a powerful module that allows you to play games within Discord!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aniket#0729",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "discord.js": "^13.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aniket091/Gamecord.git"
+  },
+  "homepage": "https://github.com/aniket091/Gamecord",
+  "keywords": [
+    "gamecord",
+    "discord-games",
+    "minigames"
+  ],
+  "bugs": {
+    "url": "https://github.com/aniket091/Gamecord/issues"
+  },
+  "directories": {
+    "lib": "lib"
+  }
+}
