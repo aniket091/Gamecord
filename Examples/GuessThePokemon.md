@@ -3,7 +3,7 @@
 ```js
 const { GuessThePokemon } = require('discord-gamecord')
 
-new Connect4({
+new GuessThePokemon({
     message: message,
     embed: {
       title: 'Who\'s This Pokemon?',

@@ -11,6 +11,7 @@
 ```js
 npm i discord-gamecord
 ```
+- For Discord.js v12: npm i discord-gamecord@old
 
 ## **✨ Features**
 

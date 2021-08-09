@@ -12,7 +12,7 @@ new RockPaperScissors({
       color: '#5865F2',
     },
     buttons: {
-      rock: 'Rock',
+	  rock: 'Rock',
 	  paper: 'Paper',
 	  scissors: 'Scissors',
     },

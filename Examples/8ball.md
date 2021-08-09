@@ -6,7 +6,7 @@ const question = 'What\'s going on?'
 
 await EightBall({
     message: message,
- 	question: question,
+	question: question,
 	embed: {
 		title: '🎱 8Ball',
 		color: '#5865F2'
