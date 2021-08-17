@@ -143,7 +143,7 @@ class TicTacToe {
 		.setAuthor(`${this.message.author.username} vs ${this.opponent.username}`)
         .setDescription(this.options.turnMessage
             .replace('{emoji}', this.getChip())
-            .replace('{player}', this.redTurn ? this.message.author.username : this.opponent.username))
+            .replace('{player}', this.xTurn ? this.message.author.username : this.opponent.username))
         .setColor(this.options.embed.color)
 
         let a1 = new MessageButton().setCustomId(btn_a1).setStyle("SECONDARY").setLabel("-")
@@ -210,7 +210,7 @@ class TicTacToe {
 				const edit_embed = msg.embeds[0]
 				.setDescription(this.options.turnMessage
                     .replace('{emoji}', this.getChip())
-                .replace('{player}', this.redTurn ? this.message.author.username : this.opponent.username))
+                .replace('{player}', this.xTurn ? this.message.author.username : this.opponent.username))
 
 				msg.edit({ embeds: [edit_embed], components: msg.components })
 			}	            
