@@ -2,7 +2,7 @@
   "meta": {
     "generator": "0.10.0",
     "format": 20,
-    "date": 1633182401338
+    "date": 1633182872350
   },
   "custom": {
     "general": {
@@ -28,7 +28,7 @@
         "8ball": {
           "name": "8ball",
           "type": "md",
-          "content": "# 🎱 8Ball\r\n\r\n```js\r\nconst { EightBall } = require('discord-gamecord')\r\nconst question = 'What\\'s going on?'\r\n\r\nnew EightBall({\r\n\tmessage: message,\r\n\tquestion: question,\r\n\tslash_command: false,\r\n\tembed: {\r\n\t\ttitle: '🎱 8Ball',\r\n\t\tcolor: '#5865F2'\r\n\t}\r\n}).startGame();\r\n```",
+          "content": "# 🎱 The Magic 8Ball\r\n\r\n```js\r\nconst { EightBall } = require('discord-gamecord')\r\nconst question = 'What\\'s going on?'\r\n\r\nnew EightBall({\r\n\tmessage: message,\r\n\tquestion: question,\r\n\tslash_command: false,\r\n\tembed: {\r\n\t\ttitle: '🎱 8Ball',\r\n\t\tcolor: '#5865F2'\r\n\t}\r\n}).startGame();\r\n```",
           "path": "docs/games/8ball.md"
         },
         "Connect4": {
@@ -58,7 +58,7 @@
         "reverseText": {
           "name": "Reverse Text",
           "type": "md",
-          "content": "# 🧩 Reverse Text\r\n\r\n```js\r\nconst { reverseText } = require('discord-gamecord');\r\nconst Text = 'Discord Gamecord';\r\n\r\n<channel>.send(await reverseText(Text));\r\n```",
+          "content": "# ⏪ Reverse Text\r\n\r\n```js\r\nconst { reverseText } = require('discord-gamecord');\r\nconst Text = 'Discord Gamecord';\r\n\r\n<channel>.send(await reverseText(Text));\r\n```",
           "path": "docs/games/reverseText.md"
         },
         "RockPaperScissors": {
