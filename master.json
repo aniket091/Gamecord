@@ -2,7 +2,7 @@
   "meta": {
     "generator": "0.10.0",
     "format": 20,
-    "date": 1633182872350
+    "date": 1633183400898
   },
   "custom": {
     "general": {
@@ -76,7 +76,7 @@
         "Tic-Tac-Toe": {
           "name": "Tic Tac Toe",
           "type": "md",
-          "content": "# 🧩 Tic Tac Toe\r\n\r\n```js\r\nconst { TicTacToe } = require('discord-gamecord')\r\n\r\nnew TicTacToe({\r\n  message: message,\r\n  slash_command: false,\r\n  opponent: message.mentions.users.first(),\r\n  embed: {\r\n    title: 'Tic Tac Toe',\r\n    OverTitle: 'Game Over',\r\n    color: '#5865F2',\r\n  },\r\n  oEmoji: '🔵',\r\n  xEmoji: '❌',\r\n  blankEmoji: '➖',\r\n  oColor: 'PRIMARY',\r\n  xColor: 'DANGER',\r\n  waitMessage: 'Waiting for the opponent...',\r\n  turnMessage: '{emoji} | Its now **{player}** turn!',\r\n  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Tic Tac Toe!',\r\n  cancelMessage: 'Looks like they refused to have a game of Tic Tac Toe. \\:(',\r\n  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',\r\n  drawMessage: 'It was a draw!',\r\n  winMessage: '{emoji} | **{winner}** won the game!',\r\n  gameEndMessage: 'The game went unfinished :(',\r\n}).startGame();\r\n```\r\n\r\n## Slash Commands\r\n```js\r\nmessage: interaction,\r\nslash_command: true,\r\nopponent: interaction.options.getUser('user'),\r\n```",
+          "content": "# 🧩 Tic Tac Toe\r\n\r\n```js\r\nconst { TicTacToe } = require('discord-gamecord')\r\n\r\nnew TicTacToe({\r\n  message: message,\r\n  slash_command: false,\r\n  opponent: message.mentions.users.first(),\r\n  embed: {\r\n    title: 'Tic Tac Toe',\r\n    OverTitle: 'Game Over',\r\n    color: '#5865F2',\r\n  },\r\n  oEmoji: '🔵',\r\n  xEmoji: '❌',\r\n  blankEmoji: '➖',\r\n  oColor: 'PRIMARY',\r\n  xColor: 'DANGER',\r\n  waitMessage: 'Waiting for the opponent...',\r\n  turnMessage: '{emoji} | Its now **{player}** turn!',\r\n  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Tic Tac Toe!',\r\n  cancelMessage: 'Looks like they refused to have a game of Tic Tac Toe. \\:(',\r\n  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',\r\n  drawMessage: 'It was a draw!',\r\n  winMessage: '{emoji} | **{winner}** won the game!',\r\n  gameEndMessage: 'The game went unfinished :(',\r\n}).startGame();\r\n```\r\n\r\n```\r\n❄️ Availiable Colors: | BLURPLE - PRIMARY | GREY - SECONDARY | RED - DANGER | GREEN - SUCCESS\r\n```\r\n\r\n## Slash Commands\r\n```js\r\nmessage: interaction,\r\nslash_command: true,\r\nopponent: interaction.options.getUser('user'),\r\n```",
           "path": "docs/games/Tic-Tac-Toe.md"
         },
         "Trivia": {
