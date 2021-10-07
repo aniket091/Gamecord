@@ -3,26 +3,28 @@ const client = new Discord.Client();
 const { Snake } = require('../index');
 
 
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
   if(message.content === '!snake') {
+
     new Snake({
       message: message,
+      slash_command: false,
       embed: {
         title: 'Snake Game',
-	color: '#5865F2',
-	OverTitle: "Game Over",
+        color: '#5865F2',
+        OverTitle: 'Game Over',
       },
-      snake: { head: '😄', body: '🟨', tail: '🟡' },
+      snake: { head: '🟢', body: '🟩', tail: '🟢' },
       emojis: {
-        board: '⬛', 
+        board: '⬛',
         food: '🍎',
         up: '⬆️', 
         down: '⬇️',
-	right: '➡️',
-	left: '⬅️',
+        right: '➡️',
+        left: '⬅️',
       }
     }).startGame();
   }
 });
 
-client.login('DISCORD_BOT_TOKEN');
+client.login('YOUR_COOL_DISCORD_BOT_TOKEN');

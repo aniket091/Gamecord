@@ -1,43 +1,47 @@
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { disableButtons } = require('../utils/utils')
+const verify = require('../utils/verify')
  
 const WIDTH = 7;
 const HEIGHT = 6;
-const gameBoard = [];
-const reactions = { "1️⃣": 1, "2️⃣": 2, "3️⃣": 3, "4️⃣": 4, "5️⃣": 5, "6️⃣": 6, "7️⃣": 7 }
 
 module.exports = class Connect4Game {
     constructor(options = {}) {
         if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
         if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')
-
         if(!options.opponent) throw new TypeError('NO_OPPONENT: Please provide an opponent arguement')
         if (typeof options.opponent !== 'object') throw new TypeError('INVALID_OPPONENT: Invalid Discord User object was provided.')
-        
+        if (!options.slash_command) options.slash_command = false;
+        if (typeof options.slash_command !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: Slash command must be a boolean.')
+
+
         if (!options.embed) options.embed = {};
         if (!options.embed.title) options.embed.title = 'Connect 4';
         if (typeof options.embed.title !== 'string')  throw new TypeError('INVALID_TITLE: Embed Title must be a string.')
-
         if (!options.embed.color) options.embed.color = '#5865F2';
         if (typeof options.embed.color !== 'string')  throw new TypeError('INVALID_COLOR: Embed Color must be a string.')
-        
+
+
         if (!options.emojis) options.emojis = {};
         if (!options.emojis.player1) options.emojis.player1 = '🔵';
         if (typeof options.emojis.player1 !== 'string')  throw new TypeError('INVALID_EMOJI: Player1 Emoji must be a string.')
-
         if (!options.emojis.player2) options.emojis.player2 = '🟡';
         if (typeof options.emojis.player2 !== 'string')  throw new TypeError('INVALID_EMOJI: Player2 Emoji must be a string.')
 
+
         if (!options.askMessage) options.askMessage = 'Hey {opponent}, {challenger} challenged you for a game of Connect 4!';
         if (typeof options.askMessage !== 'string')  throw new TypeError('ASK_MESSAGE: Ask Message must be a string.')
-
         if (!options.cancelMessage) options.cancelMessage = 'Looks like they refused to have a game of Connect4. \:(';
         if (typeof options.cancelMessage !== 'string')  throw new TypeError('CANCEL_MESSAGE: Cancel Message must be a string.')
-
         if (!options.timeEndMessage) options.timeEndMessage = 'Since the opponent didnt answer, i dropped the game!';
         if (typeof options.timeEndMessage !== 'string')  throw new TypeError('TIME_END_MESSAGE: Time End Message must be a string.')
 
-        if (!options.turnMessage) options.turnMessage = '{emoji} | Its now **{player}** turn!';
-        if (typeof options.turnMessage !== 'string')  throw new TypeError('TURN_MESSAGE: Turn Message must be a string.')      
+        
+        if (!options.turnMessage) options.turnMessage = '{emoji} | Its turn of player **{player}**.';
+        if (typeof options.turnMessage !== 'string')  throw new TypeError('TURN_MESSAGE: Turn Message must be a string.')
+        if (!options.waitMessage) options.waitMessage = 'Waiting for the opponent...';
+        if (typeof options.waitMessage !== 'string')  throw new TypeError('WAIT_MESSAGE: Wait Message must be a string.')        
+
 
         if (!options.gameEndMessage) options.gameEndMessage = 'The game went unfinished :(';
         if (typeof options.gameEndMessage !== 'string')  throw new TypeError('GAME_END_MESSAGE: Game End Message must be a string.')
@@ -52,185 +56,170 @@ module.exports = class Connect4Game {
         this.message = options.message;
         this.opponent = options.opponent;
         this.emojis = options.emojis;
+        this.gameBoard = [];
         this.options = options;
-        this.gameEmbed = null;
         this.inGame = false;
         this.redTurn = true;
         // red => author, yellow => opponent
-
     }
 
+    
     getGameBoard() {
-        let str = "";
+        let str = '';
         for (let y = 0; y < HEIGHT; y++) {
             for (let x = 0; x < WIDTH; x++) {
-                str += "" + gameBoard[y * WIDTH + x];
+                str += '' + this.gameBoard[y * WIDTH + x];
             }
-            str += "\n";
+            str += '\n';
         }
-        str += "1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣"
+        str += '1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣'
         return str;
-    
     }
+
+    sendMessage(content) {
+        if (this.options.slash_command) return this.message.editReply(content)
+        else return this.message.channel.send(content)
+    }
+
 
     async startGame() {
-        if (this.inGame) return;
-        const author = this.message.author;
-        const opponent = this.opponent;
-        const emoji = this.options.emoji ? this.options.emoji : '';
+        if (this.options.slash_command) {
+            if (!this.message.deferred) await this.message.deferReply();
+            this.message.author = this.message.user;
+        }
 
-        if (opponent.bot) return this.message.channel.send(`**${emoji} You can't play with bots!**`)
-        if (opponent.id === author.id) return this.message.channel.send(`**${emoji} You cannot play with yourself!**`)
+        if (this.opponent.bot) return this.sendMessage('You can\'t play with bots!')
+        if (this.opponent.id === this.message.author.id) return this.sendMessage('You cannot play with yourself!')
 
-        const embed = new MessageEmbed()
-        .setTitle(this.options.embed.title)
-        .setDescription(this.options.askMessage
-            .replace('{challenger}', '<@!' + this.message.author.id + '>')
-            .replace('{opponent}', '<@!' + this.opponent.id + '>'))
-        .setColor(this.options.green || this.options.embed.color)
+        const check = await verify(this.options)
 
-        let btn1 = new MessageButton().setLabel('Accept').setStyle('SUCCESS').setCustomId('accept')
-        let btn2 = new MessageButton().setLabel('Reject').setStyle('DANGER').setCustomId('reject')
-        let row = new MessageActionRow().addComponents(btn1, btn2);
-        const askMsg = await this.message.channel.send({ embeds: [embed], components: [row] });
-        
-
-        const filter = (interaction) => interaction === interaction;
-        const interaction = askMsg.createMessageComponentCollector({
-            filter, time: 60000
-        })
-
-        interaction.on('collect', async (btn) => {
-            if (btn.user.id !== this.opponent.id) {
-                return btn.reply({ content: this.options.othersMessage,  ephemeral: true })
-            }
-            
-            await btn.deferUpdate();
-            if (btn.customId === 'reject') {
-                for (let y = 0; y < askMsg.components[0].components.length; y++) {
-                  askMsg.components[0].components[y].disabled = true;
-                }
-    
-                if (this.options.red) askMsg.embeds[0].color = this.options.red;
-                askMsg.embeds[0].description = this.options.cancelMessage.replace('{opponent}', '<@!' + this.opponent.id + '>').replace('{challenger}', '<@!' + this.message.author.id + '>')
-                return askMsg.edit({ embeds: askMsg.embeds, components: askMsg.components });
-    
-            } else if (btn.customId === 'accept') {
-                askMsg.delete().catch();
-                for (let y = 0; y < HEIGHT; y++) {
-                    for (let x = 0; x < WIDTH; x++) {
-                        gameBoard[y * WIDTH + x] = "⚪";
-                    }
-                }
-                this.inGame = true;
-        
-                this.message.channel.send({ embeds: [this.GameEmbed()] }).then(msg => {
-                    this.gameEmbed = msg;
-                    Object.keys(reactions).forEach(reaction => {
-                        this.gameEmbed.react(reaction);
-                    });
-        
-                    this.checkReactions();
-                });        
-            }
-        });
-
-        interaction.on('end', (c, r) => {
-            if (r !== 'time') return;
-            for (let y = 0; y < askMsg.components[0].components.length; y++) {
-              askMsg.components[0].components[y].disabled = true;
-            }
-
-            if (this.options.red) askMsg.embeds[0].color = this.options.red;
-            askMsg.embeds[0].description = this.options.timeEndMessage.replace('{opponent}', '<@!' + this.opponent.id + '>').replace('{challenger}', '<@!' + this.message.author.id + '>');
-            return askMsg.edit({ embeds: askMsg.embeds, components: askMsg.components });
-        });
+        if (check) {
+            this.Connect4Game();
+        }
     }
+
+
+    async Connect4Game() {
+        for (let y = 0; y < HEIGHT; y++) {
+            for (let x = 0; x < WIDTH; x++) {
+                this.gameBoard[y * WIDTH + x] = '⚪';
+            }
+        }
+        this.inGame = true;
+
+
+        const btn1 = new MessageButton().setStyle('PRIMARY').setEmoji('1️⃣').setCustomId('1_connect4')
+        const btn2 = new MessageButton().setStyle('PRIMARY').setEmoji('2️⃣').setCustomId('2_connect4')
+        const btn3 = new MessageButton().setStyle('PRIMARY').setEmoji('3️⃣').setCustomId('3_connect4')
+        const btn4 = new MessageButton().setStyle('PRIMARY').setEmoji('4️⃣').setCustomId('4_connect4')
+        const btn5 = new MessageButton().setStyle('PRIMARY').setEmoji('5️⃣').setCustomId('5_connect4')
+        const btn6 = new MessageButton().setStyle('PRIMARY').setEmoji('6️⃣').setCustomId('6_connect4')
+        const btn7 = new MessageButton().setStyle('PRIMARY').setEmoji('7️⃣').setCustomId('7_connect4')
+
+        const row1 = new MessageActionRow().addComponents(btn1, btn2, btn3, btn4)
+        const row2 = new MessageActionRow().addComponents(btn5, btn6, btn7)
+
+
+        const msg = await this.sendMessage({ embeds: [this.GameEmbed()], components: [row1, row2] })
+
+        this.ButtonInteraction(msg);  
+    }
+
     
     GameEmbed() {
-        const status = this.options.turnMessage.replace('{emoji}', this.getChip()).replace('{player}', this.redTurn ? this.message.author.username : this.opponent.username)
+        const status = this.options.turnMessage.replace('{emoji}', this.getChip())
+        .replace('{player}', this.redTurn ? this.message.author.tag : this.opponent.tag)
 
         return new MessageEmbed() 
         .setColor(this.options.embed.color)
         .setTitle(this.options.embed.title)
         .setDescription(this.getGameBoard())
-        .addField('Status', status)
+        .addField(this.options.embed.statusTitle || 'Status', status)
         .setFooter(`${this.message.author.username} vs ${this.opponent.username}`, this.message.guild.iconURL({ dynamic: true }))
     } 
 
 
-    gameOver(result) {
+    gameOver(result, msg) {
         this.inGame = false;
 
         const editEmbed = new MessageEmbed()
         .setColor(this.options.embed.color)
         .setTitle(this.options.embed.title)
         .setDescription(this.getGameBoard())
-        .addField('Status', this.getResultText(result))
+        .addField(this.options.embed.statusTitle || 'Status', this.getResultText(result))
         .setFooter(`${this.message.author.username} vs ${this.opponent.username}`, this.message.guild.iconURL({ dynamic: true }))
         
-        this.gameEmbed.edit({ embeds: [editEmbed] });
-        this.gameEmbed.reactions.removeAll();
+
+        return msg.edit({ embeds: [editEmbed], components: disableButtons(msg.components) });
     }
 
     
-    checkReactions() {
-        const filter = (reaction, user) => Object.keys(reactions).includes(reaction.emoji.name) && user.id === this.message.author.id || user.id === this.opponent.id;
+    ButtonInteraction(msg) {
+        const collector = msg.createMessageComponentCollector({
+            idle: 60000,
+        })
 
-        this.gameEmbed.awaitReactions({ filter, max: 1, time: 120000, errors: ['time'] })
-        .then(async collected => {
-            const reaction = collected.first();
-            const user = reaction.users.cache.filter(user => user.id !== this.gameEmbed.author.id).first();
-            
-            // Get the turn of the user.
-            const turn = this.redTurn ? this.message.author.id : this.opponent.id;
 
-            if (user.id !== turn) {
-                reaction.users.remove(user.id)
-                return this.checkReactions();
+        collector.on('collect', async btn => {
+            if (btn.user.id !== this.message.author.id && btn.user.id !== this.opponent.id) {
+                const authors = this.message.author.tag + 'and' + this.opponent.tag;
+                return btn.reply({ content: this.options.othersMessage.replace('{author}', authors),  ephemeral: true })
             }
             
-            const column = reactions[reaction.emoji.name] - 1;
+            const turn = this.redTurn ? this.message.author.id : this.opponent.id;
+            if (btn.user.id !== turn) {
+				return btn.reply({ content: this.options.waitMessage,  ephemeral: true })
+			}
+            await btn.deferUpdate();
+
+
+            const id = btn.customId.split('_')[0];
+            const column = parseInt(id) - 1;
             let placedX = -1;
             let placedY = -1;
 
+
             for (let y = HEIGHT - 1; y >= 0; y--) {
-                const chip = gameBoard[column + (y * WIDTH)];
-                if (chip === "⚪") {
-                    gameBoard[column + (y * WIDTH)] = this.getChip();
+                const chip = this.gameBoard[column + (y * WIDTH)];
+                if (chip === '⚪') {
+                    this.gameBoard[column + (y * WIDTH)] = this.getChip();
                     placedX = column;
                     placedY = y;
                     break;
                 }
             }
 
-            reaction.users.remove(user.id).then(() => {
-                if (placedY == 0)
-                    this.gameEmbed.reactions.cache.get(reaction.emoji.name).remove();
+            if (placedY == 0) {
+                if (column > 3) {
+                    msg.components[1].components[column % 4].disabled = true;
+                } else {
+                    msg.components[0].components[column].disabled = true;
+                }
+            }
 
-                if (this.hasWon(placedX, placedY)) {
-                    this.gameOver({ result: 'winner', name: user.username, emoji: this.getChip() });
-                }
-                else if (this.isBoardFull()) {
-                    this.gameOver({ result: 'tie' });
-                }
-                else {
-                    this.redTurn = !this.redTurn;
-                    this.gameEmbed.edit({ embeds: [this.GameEmbed()] });
-                    this.checkReactions();
-                }
-            });
+
+            if (this.hasWon(placedX, placedY)) {
+                this.gameOver({ result: 'winner', name: btn.user.tag, emoji: this.getChip() }, msg);
+            }
+            else if (this.isBoardFull()) {
+                this.gameOver({ result: 'tie' }, msg);
+            }
+            else {
+                this.redTurn = !this.redTurn;
+                msg.edit({ embeds: [this.GameEmbed()], components: msg.components });
+            }
         })
-        .catch(collected => {
-            console.log(collected)
-            this.gameOver({ result: 'timeout' });
-        });
+
+        collector.on('end', async(c, r) => {
+            if (r === 'idle' && this.inGame == true) this.gameOver({ result: 'timeout' }, msg)
+        })
 
     }
 
 
     hasWon(placedX, placedY) {
         const chip = this.getChip();
+        const gameBoard = this.gameBoard;
 
         //Horizontal Check
         const y = placedY * WIDTH;
@@ -279,7 +268,7 @@ module.exports = class Connect4Game {
     isBoardFull() {
         for (let y = 0; y < HEIGHT; y++)
             for (let x = 0; x < WIDTH; x++)
-                if (gameBoard[y * WIDTH + x] === "⚪")
+                if (this.gameBoard[y * WIDTH + x] === '⚪')
                     return false;
         return true;
     }
@@ -294,4 +283,4 @@ module.exports = class Connect4Game {
         else
             return this.options.winMessage.replace('{emoji}', result.emoji).replace('{winner}', result.name);
     }
-}    
+}

@@ -5,6 +5,7 @@ const { RockPaperScissors } = require('discord-gamecord')
 
 new RockPaperScissors({
   message: message,
+  slash_command: false,
   opponent: message.mentions.users.first(),
   embed: {
     title: 'Rock Paper Scissors',
@@ -12,9 +13,14 @@ new RockPaperScissors({
     color: '#5865F2',
   },
   buttons: {
-	  rock: 'Rock',
-	  paper: 'Paper',
-	  scissors: 'Scissors',
+    rock: 'Rock',
+    paper: 'Paper',
+    scissors: 'Scissors',
+  },
+  emojis: {
+    rock: '🌑',
+    paper: '📃',
+    scissors: '✂️',
   },
   othersMessage: 'You are not allowed to use buttons for this message!',
   chooseMessage: 'You choose {emoji}!',
@@ -26,4 +32,11 @@ new RockPaperScissors({
   winMessage: '{winner} won the game!',
   gameEndMessage: 'The game went unfinished :(',
 }).startGame();
+```
+
+## Slash Commands
+```js
+message: interaction,
+slash_command: true,
+opponent: interaction.options.getUser('user')
 ```

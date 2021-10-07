@@ -1,4 +1,4 @@
-# 🧩 Reverse Text
+# ⏪ Reverse Text
 
 ```js
 const { reverseText } = require('discord-gamecord');
