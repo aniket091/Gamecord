@@ -2,7 +2,7 @@
   "meta": {
     "generator": "0.10.0",
     "format": 20,
-    "date": 1633240369417
+    "date": 1633577821524
   },
   "custom": {
     "general": {
@@ -86,7 +86,7 @@
           "path": "docs/games/Trivia.md"
         },
         "WouldYouRather": {
-          "name": "WouldYouRather",
+          "name": "Would You Rather",
           "type": "md",
           "content": "# 🧩 Would You Rather\r\n\r\n```js\r\nconst { WouldYouRather } = require('discord-gamecord')\r\n\r\nnew WouldYouRather({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Would You Rather',\r\n    color: '#5865F2',\r\n  },\r\n  thinkMessage: '**Thinking...**',\r\n  buttons: { option1: 'Option 1', option2: 'Option 2' },\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n}).startGame();\r\n```",
           "path": "docs/games/WouldYouRather.md"
