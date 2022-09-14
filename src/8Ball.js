@@ -1,6 +1,19 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Message } = require('discord.js');
 const answers = require('../utils/8ball')
 
+/**
+ * @typedef {object} Embed The embed for your message
+ * @property {string} title The title of your message
+ * @property {string} color The color you want in hex code
+ */
+
+/**
+ * @typedef {Object} EightBallOptions
+ * @property {Message} message Your discord message
+ * @property {String} question The question you want to ask
+ * @property {Boolean} slash_command Tell the package if the message is slash
+ * @property {Embed} embed The embed that is sent with your game
+ */
 module.exports = class EightBall {
 	constructor(options = {}) {
 		if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')

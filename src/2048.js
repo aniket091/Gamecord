@@ -5,8 +5,39 @@ const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 const WIDTH = 4;
 const HEIGHT = 4;
 
+// intellisense
+
+/**
+ * @typedef {object} Embed The embed for your message
+ * @property {string} title The title of your message
+ * @property {string} color The color you want in hex code
+ * @property {string} overTitle The title displayed when the game is over
+ */
+
+/**
+ * @typedef {object} Emojis The emojis for your game
+ * @property {string} up The emoji for going up
+ * @property {string} down The emoji for going down
+ * @property {string} left The emoji for going left
+ * @property {string} right The emoji for going right
+ */
+
+/**
+ * @typedef {Object} TwoZeroFourEightOptions
+ * @property {Message} message Your discord message
+ * @property {String} question The question you want to ask
+ * @property {Boolean} slash_command Tell the package if the message is slash
+ * @property {Embed} embed The embed that is sent with your game
+ * @property {Emojis} emoji The emojis for your game 
+ */
+
+// end of intellisense
 
 module.exports = class TwoZeroFourEight {
+    /**
+     * Create a new 2048
+     * @param {TwoZeroFourEightOptions} options 
+     */
 	constructor(options = {}) {
 		if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
         if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')
