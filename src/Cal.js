@@ -3,7 +3,7 @@ const calculate = async (...args) => {
     const value = await evaluate(...args)
     return value
 }
-const { MessageButton, MessageActionRow, MessageEmbed, Message } = require('discord.js')
+const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js')
 const defaultOptions = {
     message: null,
     isSlashCommand: false,
@@ -196,19 +196,121 @@ class Calculator {
         .setTitle(this.options.embed.title || defaultOptions.embed.title)
         .setDescription(display)
         if(this.options.isSlashCommand == undefined || this.options.isSlashCommand == false) {
-            await this.options.message.reply({
+            const message = await this.options.message.reply({
                 embeds: [embed],
                 components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
             })
-            const collector = this.options.message.channel.createMessageComponentCollector({ idle: 60000 })
+            const collector = message.createMessageComponentCollector({ idle: 60000 })
             collector.on('collect', async (btn) => {
                 const author = this.options.message.author.id
                 const authorReplacement = this.options.message.author.tag
                 if(btn.user.id !== author) {
                     await btn.deferReply({ ephemeral: true })
                     return btn.followUp({ content: String(otherMsg).replace(/{author}/g, authorReplacement), ephemeral: true })
-                } 
-                await btn.deferUpdate()
+                }
+                await btn.deferUpdate();
+                const customId = btn.customId
+                if(customId === '1') str.push('1')
+                if(customId === '3') str.push('3')
+                if(customId === '4') str.push('4')
+                if(customId === '5') str.push('5')
+                if(customId === '6') str.push('6')
+                if(customId === '7') str.push('7')
+                if(customId === '8') str.push('8')
+                if(customId === '9') str.push('9')
+                if(customId === '0') str.push('0')
+                if(customId === '2') str.push('2')
+                if(customId === 'left_bracket') str.push(' ( ')
+                if(customId === 'right_bracket') str.push(' ) ')
+                if(customId === 'power') str.push(' ^ ')
+                if(customId === 'log') str.push('log( ')
+                if(customId === 'clear') {
+                    const embed = new MessageEmbed()
+                    .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                    .setFooter({
+                        text: this.options.embed.footer || defaultOptions.embed.footer
+                    })
+                    .setColor(this.options.embed.color || defaultOptions.embed.color)
+                    .setDescription("```\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n```")
+                    btn.editReply({
+                        components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5],
+                        embeds: [embed]
+                    })
+                    return
+                }
+                if(customId === 'divide') str.push(' / ')
+                if(customId === 'delete') str.pop()
+                if(customId === 'plus') str.push(' + ')
+                if(customId === 'minus') str.push(' - ')
+                if(customId === 'times') str.push(' * ')
+                if(customId === 'dot') str.push('.')
+                if(customId === 'equal') {
+                    const embed2 = new MessageEmbed()
+                    .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                    .setFooter({
+                        text: this.options.embed.footer || defaultOptions.embed.footer
+                    })
+                    .setColor(this.options.embed.color || defaultOptions.embed.color)
+                    .setDescription(`\`\`\`\nCalculating your equlation\n\`\`\``)
+                    btn.editReply({
+                        embeds: [embed2],
+                        components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
+                    })
+                    const equation = str.join('')
+                    const answer = await calculate(equation)
+                    const embed = new MessageEmbed()
+                    .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                    .setFooter({
+                        text: this.options.embed.footer || defaultOptions.embed.footer
+                    })
+                    .setColor(this.options.embed.color || defaultOptions.embed.color)
+                    .setDescription(`\`\`\`\n= ${answer}\n\`\`\``)
+                    btn.editReply({
+                        embeds: [embed],
+                        components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
+                    })
+                    str = []
+                    return
+                }
+                const equation = `\`\`\`\n${str.join('')}\n\`\`\``
+                const embed = new MessageEmbed()
+                .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                .setFooter({
+                    text: this.options.embed.footer || defaultOptions.embed.footer
+                })
+                .setColor(this.options.embed.color || defaultOptions.embed.color)
+                .setDescription(equation)
+                btn.editReply({
+                    embeds: [embed],
+                    components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
+                })
+            })
+            collector.on('end', async i => {
+                const embed = new MessageEmbed()
+                .setTitle(this.options.embed.disabled.title || "Calculator is disabled")
+                .setFooter({
+                    text: this.options.embed.footer || defaultOptions.embed.footer
+                })
+                .setColor(this.options.embed.color || defaultOptions.embed.color)
+                message.edit({
+                    embeds: [embed],
+                    components: []
+                })
+            })
+        } else {
+            const message = await this.options.message.reply({
+                embeds: [embed],
+                components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
+            })
+            const collector = message.createMessageComponentCollector({ idle: 60000 })
+            collector.on('collect', async (btn) => {
+                const author = this.options.message.user.id
+                const authorReplacement = this.options.message.user.tag
+                if(btn.user.id !== author) {
+                    await btn.deferReply({ ephemeral: true })
+                    return btn.followUp({ content: String(otherMsg).replace(/{author}/g, authorReplacement), ephemeral: true })
+                }
+                await btn.deferUpdate();
                 const customId = btn.customId
                 if(customId === '1') str.push('1')
                 if(customId === '3') str.push('3')

@@ -12,12 +12,15 @@ client.on('messageCreate', async (message) => {
       embed: {
         footer: "Calculator",
         title: '©️ Gamecord',
-        color: "GREEN"
+        color: "GREEN",
+        disabled: {
+          title: "Cal is disabled!"
+        }
       },
-      otherMessage: "This is not your game {author}"
+      otherMessage: "This is not your calculator {author}"
     })
     cal.startGame()
   }
 });
 
-client.login('Token');
+client.login('CJIODSACKSA YOUR TOKEN NICE COOL XDDD');
