@@ -1,4 +1,4 @@
-const { MessageEmbed, Message } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const answers = require('../utils/8ball')
 
 /**
@@ -9,7 +9,7 @@ const answers = require('../utils/8ball')
 
 /**
  * @typedef {Object} EightBallOptions
- * @property {Message} message Your discord message
+ * @property {Object} message Your discord message
  * @property {String} question The question you want to ask
  * @property {Boolean} slash_command Tell the package if the message is slash
  * @property {Embed} embed The embed that is sent with your game

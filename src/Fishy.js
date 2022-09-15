@@ -1,10 +1,9 @@
 const { randomRange } = require('../utils/utils')
 const fishes = require('../utils/fishy.json')
-const { Message } = require('discord.js')
 
 /**
  * @typedef {object} FishyGameOptions the options for fishy
- * @property {Message} message the discord message
+ * @property {Object} message the discord message
  * @property {string} fishyMessage ayyy you caught a fish
  * @property {string} returnMessage return message
  */
