@@ -1,7 +1,19 @@
 const { randomRange } = require('../utils/utils')
 const fishes = require('../utils/fishy.json')
+const { Message } = require('discord.js')
+
+/**
+ * @typedef {object} FishyGameOptions the options for fishy
+ * @property {Message} message the discord message
+ * @property {string} fishyMessage ayyy you caught a fish
+ * @property {string} returnMessage return message
+ */
 
 module.exports = class FishyGame {
+	/**
+	 * create a new fishy game
+	 * @param {FishyGameOptions} options 
+	 */
 	constructor(options = {}) {
 		if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
 		if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')

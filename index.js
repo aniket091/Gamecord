@@ -12,3 +12,4 @@ module.exports.EightBall = require('./src/8Ball')
 module.exports.Emojify = require('./utils/emojify')
 module.exports.version = require('./package.json').version;
 module.exports.reverseText = require('./utils/utils').reverseText;
+module.exports.Calculator = require('./src/Cal.js')

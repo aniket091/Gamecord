@@ -1,11 +1,45 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { MessageEmbed, MessageButton, MessageActionRow, User, Message } = require('discord.js');
 const { disableButtons } = require('../utils/utils')
 const verify = require('../utils/verify')
  
 const WIDTH = 7;
 const HEIGHT = 6;
 
+/**
+ * @typedef {object} Embed The embed for your message
+ * @property {string} title The title of your message
+ * @property {string} color The color you want in hex code
+ */
+
+/**
+ * @typedef {Object} Emojis The emojis of different players
+ * @property {string} player1 the emoji of player one
+ * @property {string} player2 the emoji of player two
+ */
+
+/**
+ * @typedef {Object} Connect4Options the options to create a new connect 4
+ * @property {Message} message Your discord message
+ * @property {String} question The question you want to ask
+ * @property {Boolean} slash_command Tell the package if the message is slash
+ * @property {Embed} embed The embed that is sent with your game
+ * @property {string} waitMessage the wait message
+ * @property {string} turnMessage Tell whose turn it is
+ * @property {string} winMessage Winning message 🎉
+ * @property {User} opponent The opponent
+ * @property {string} gameEndMessage The message for when the game ends unfinished
+ * @property {string} drawMessage draw message
+ * @property {string} othersMessage Tell them they can't play >:<
+ * @property {string} askMessage ask message
+ * @property {string} cancelMessage The message that is displayed when the game is cancelled
+ * @property {string} timeEndMessage The opponent didn't ask so you write a message for them
+ */
+
 module.exports = class Connect4Game {
+    /**
+     * Create a new connect 4
+     * @param {Connect4Options} options 
+     */
     constructor(options = {}) {
         if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
         if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')
@@ -162,7 +196,7 @@ module.exports = class Connect4Game {
 
         collector.on('collect', async btn => {
             if (btn.user.id !== this.message.author.id && btn.user.id !== this.opponent.id) {
-                const authors = this.message.author.tag + 'and' + this.opponent.tag;
+                const authors = this.message.author.tag + ' and ' + this.opponent.tag;
                 return btn.reply({ content: this.options.othersMessage.replace('{author}', authors),  ephemeral: true })
             }
             
