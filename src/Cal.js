@@ -23,7 +23,7 @@ class Calculator {
     async startGame() {
         const otherMsg = this.options.otherMessage
         let str = []
-        if(!this.options.message) throw new Error('[ Gamecord Error ] Cannot start a calculator process without a message')
+        if(!this.options?.message) throw new Error('[ Gamecord Error ] Cannot start a calculator process without a message')
         if(typeof this.options.message != 'object') throw new Error('[ Gamecord Error ] Provided message is not a discord message')
         const actionRow1 = new MessageActionRow()
         .addComponents(
@@ -190,12 +190,12 @@ class Calculator {
         const display = "```\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n```"
         const embed = new MessageEmbed()
         .setFooter({
-            text: this.options.embed.footer || defaultOptions.embed.footer
+            text: this.options.embed?.footer || defaultOptions.embed.footer
         })
-        .setColor(this.options.embed.color || defaultOptions.embed.color)
-        .setTitle(this.options.embed.title || defaultOptions.embed.title)
+        .setColor(this.options.embed?.color || defaultOptions.embed.color)
+        .setTitle(this.options.embed?.title || defaultOptions.embed.title)
         .setDescription(display)
-        if(this.options.isSlashCommand == undefined || this.options.isSlashCommand == false) {
+        if(this.options?.isSlashCommand == undefined || this.options?.isSlashCommand == false) {
             const message = await this.options.message.reply({
                 embeds: [embed],
                 components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
@@ -348,6 +348,17 @@ class Calculator {
                 if(customId === 'dot') str.push('.')
                 if(customId === 'equal') {
                     const equation = str.join('')
+                    const embed2 = new MessageEmbed()
+                    .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                    .setFooter({
+                        text: this.options.embed.footer || defaultOptions.embed.footer
+                    })
+                    .setColor(this.options.embed.color || defaultOptions.embed.color)
+                    .setDescription(`\`\`\`\nCalculating your equlation\n\`\`\``)
+                    btn.editReply({
+                        embeds: [embed2],
+                        components: [actionRow1, actionRow2, actionRow3, actionRow4, actionRow5]
+                    })
                     const answer = await calculate(equation)
                     const embed = new MessageEmbed()
                     .setTitle(this.options.embed.title || defaultOptions.embed.title)
@@ -365,11 +376,11 @@ class Calculator {
                 }
                 const equation = `\`\`\`\n${str.join('')}\n\`\`\``
                 const embed = new MessageEmbed()
-                .setTitle(this.options.embed.title || defaultOptions.embed.title)
+                .setTitle(this.options.embed?.title || defaultOptions.embed.title)
                 .setFooter({
-                    text: this.options.embed.footer || defaultOptions.embed.footer
+                    text: this.options.embed?.footer || defaultOptions.embed.footer
                 })
-                .setColor(this.options.embed.color || defaultOptions.embed.color)
+                .setColor(this.options.embed?.color || defaultOptions.embed.color)
                 .setDescription(equation)
                 btn.editReply({
                     embeds: [embed],
