@@ -1,4 +1,4 @@
-# 😄 Emojify 
+# **😄 Emojify**
 
 ```js
 const { Emojify } = require('discord-gamecord');

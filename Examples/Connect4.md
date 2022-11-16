@@ -1,35 +1,41 @@
-# 🧩 Connect 4
+# **🔢 Connect 4**
 
 ```js
-const { Connect4 } = require('discord-gamecord')
+const { Connect4 } = require('discord-gamecord');
 
-new Connect4({
+const Game = new Connect4({
   message: message,
-  slash_command: false,
+  isSlashGame: false,
   opponent: message.mentions.users.first(),
   embed: {
-    title: 'Connect 4',
-    color: '#5865F2',
+    title: 'Connect4 Game',
+    statusTitle: 'Status',
+    color: '#5865F2'
   },
   emojis: {
-    player1: '🔵',
+    board: '⚪',
+    player1: '🔴',
     player2: '🟡'
   },
-  waitMessage: 'Waiting for the opponent...',
+  timeoutTime: 60000,
+  buttonStyle: 'PRIMARY',
   turnMessage: '{emoji} | Its turn of player **{player}**.',
-  winMessage: '{emoji} | **{winner}** won the game!',
-  gameEndMessage: 'The game went unfinished :(',
-  drawMessage: 'It was a draw!',
-  othersMessage: 'You are not allowed to use buttons for this message!',
-  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Connect 4!',
-  cancelMessage: 'Looks like they refused to have a game of Connect4. \:(',
-  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',
-}).startGame()
+  winMessage: '{emoji} | **{player}** won the Connect4 Game.',
+  tieMessage: 'The Game tied! No one won the Game!',
+  timeoutMessage: 'The Game went unfinished! No one won the Game!',
+  playerOnlyMessage: 'Only {player} and {opponent} can use these buttons.'
+});
+
+Game.startGame();
+Game.on('gameOver', result => {
+  console.log(result);  // =>  { result... }
+});
 ```
 
-## Slash Commands
+
+## **`/` Slash Commands**
 ```js
 message: interaction,
-slash_command: true,
+isSlashGame: true,
 opponent: interaction.options.getUser('user')
 ```

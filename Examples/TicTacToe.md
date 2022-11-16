@@ -1,31 +1,28 @@
-# **🔖 Rock Paper Scissors**
+# **🔖 Tic Tac Toe**
 
 ```js
-const { RockPaperScissors } = require('discord-gamecord');
+const { TicTacToe } = require('discord-gamecord');
 
-const Game = new RockPaperScissors({
+const Game = new TicTacToe({
   message: message,
   isSlashGame: false,
   opponent: message.mentions.users.first(),
   embed: {
-    title: 'Rock Paper Scissors',
+    title: 'Tic Tac Toe',
     color: '#5865F2',
-    description: 'Press a button below to make a choice.'
-  },
-  buttons: {
-    rock: 'Rock',
-    paper: 'Paper',
-    scissors: 'Scissors'
+    statusTitle: 'Status',
+    overTitle: 'Game Over'
   },
   emojis: {
-    rock: '🌑',
-    paper: '📰',
-    scissors: '✂️'
+    xButton: '❌',
+    oButton: '🔵',
+    blankButton: '➖'
   },
   timeoutTime: 60000,
-  buttonStyle: 'PRIMARY',
-  pickMessage: 'You choose {emoji}.',
-  winMessage: '**{player}** won the Game! Congratulations!',
+  xButtonStyle: 'DANGER',
+  oButtonStyle: 'PRIMARY',
+  turnMessage: '{emoji} | Its turn of player **{player}**.',
+  winMessage: '{emoji} | **{player}** won the TicTacToe Game.',
   tieMessage: 'The Game tied! No one won the Game!',
   timeoutMessage: 'The Game went unfinished! No one won the Game!',
   playerOnlyMessage: 'Only {player} and {opponent} can use these buttons.'

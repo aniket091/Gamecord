@@ -1,17 +1,23 @@
-# 🧩 Would You Rather
+# **🔖 Would You Rather**
 
 ```js
-const { WouldYouRather } = require('discord-gamecord')
+const { WouldYouRather } = require('discord-gamecord');
 
-new WouldYouRather({
+const Game = new WouldYouRather({
   message: message,
-  slash_command: false,
+  isSlashGame: false,
   embed: {
     title: 'Would You Rather',
     color: '#5865F2',
   },
-  thinkMessage: '**Thinking...**',
-  buttons: { option1: 'Option 1', option2: 'Option 2' },
-  othersMessage: 'You are not allowed to use buttons for this message!',
-}).startGame();
+  buttons: {
+    option1: 'Option 1',
+    option2: 'Option 2',
+  },
+  timeoutTime: 60000,
+  errMessage: 'Unable to fetch question data! Please try again.',
+  playerOnlyMessage: 'Only {player} can use these buttons.'
+});
+
+Game.startGame();
 ```

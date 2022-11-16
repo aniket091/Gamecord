@@ -1,19 +1,30 @@
-# ❔ Trivia
+# **❔ Trivia**
 
 ```js
-const { Trivia } = require('discord-gamecord')
+const { Trivia } = require('discord-gamecord');
 
-new Trivia({
+const Game = new Trivia({
   message: message,
-  slash_command: false,
+  isSlashGame: false,
   embed: {
     title: 'Trivia',
-    description: 'You have {time} seconds to respond!',
     color: '#5865F2',
+    description: 'You have 60 seconds to guess the answer.'
   },
-  difficulty: 'medium',
-  winMessage: 'GG, Your answer was correct! It was **{answer}**',
-  loseMessage: 'Your answer was Incorrect! The correct answer was **{answer}**',
-  othersMessage: 'You are not allowed to use buttons for this message!',
-}).startGame();
+  timeoutTime: 60000,
+  buttonStyle: 'PRIMARY',
+  trueButtonStyle: 'SUCCESS',
+  falseButtonStyle: 'DANGER',
+  mode: 'multiple',  // multiple || single
+  difficulty: 'medium',  // easy || medium || hard
+  winMessage: 'You won! The correct answer is {answer}.',
+  loseMessage: 'You lost! The correct answer is {answer}.',
+  errMessage: 'Unable to fetch question data! Please try again.',
+  playerOnlyMessage: 'Only {player} can use these buttons.'
+});
+
+Game.startGame();
+Game.on('gameOver', result => {
+  console.log(result);  // =>  { result... }
+});
 ```

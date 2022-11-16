@@ -1,20 +1,24 @@
-# 🧩 Guess The Pokemon
+# **🤔 Guess The Pokemon**
 
 ```js
-const { GuessThePokemon } = require('discord-gamecord')
+const { GuessThePokemon } = require('discord-gamecord');
 
-new GuessThePokemon({
+const Game = new GuessThePokemon({
   message: message,
-  slash_command: false,
+  isSlashGame: false,
   embed: {
-    title: 'Who\'s This Pokemon?',
-    footer: 'You have only 1 chance',
-    color: '#5865F2',
+    title: 'Who\'s The Pokemon',
+    color: '#5865F2'
   },
-  time: 60000,
-  thinkMessage: '**Thinking...**',
-  winMessage: 'Nice! The pokemon was **{pokemon}**',
-  stopMessage: 'Better luck next time! It was a **{pokemon}**',
-  incorrectMessage: 'Nope! The pokemon was **{pokemon}**',
-}).startGame();
+  timeoutTime: 60000,
+  winMessage: 'You guessed it right! It was a {pokemon}.',
+  loseMessage: 'Better luck next time! It was a {pokemon}.',
+  errMessage: 'Unable to fetch pokemon data! Please try again.',
+  playerOnlyMessage: 'Only {player} can use these buttons.'
+});
+
+Game.startGame();
+Game.on('gameOver', result => {
+  console.log(result);  // =>  { result... }
+});
 ```
