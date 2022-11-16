@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "generator": "0.10.0",
+    "format": 20,
+    "date": 1633577821524
+  },
+  "custom": {
+    "general": {
+      "name": "General",
+      "files": {
+        "welcome": {
+          "name": "Welcome",
+          "type": "md",
+          "content": "# GAMECORD\r\n\r\n<p align=\"center\">\r\n\r\n  ![](https://cdn.discordapp.com/attachments/818900078077018162/893566634743173170/banner.png)\r\n  \r\n  </br>\r\n\r\n  [![downloadsBadge](https://img.shields.io/npm/dt/discord-gamecord?style=for-the-badge)](https://www.npmjs.com/package/discord-gamecord)\r\n  [![discordBadge](https://img.shields.io/discord/800631529351938089?color=5865F2&label=Aniket&style=for-the-badge)](https://discord.gg/invite/GaczkwfgV9)\r\n\r\n</p>\r\n\r\n> **Discord Gamecord is a powerful module that allows you to play games within Discord :)**\r\n\r\n## **⚙️ Installation** \r\n```\r\nnpm i discord-gamecord\r\n```\r\n\r\n## **✨ Features**\r\n\r\n- Super simple and easy to use.\r\n- Beginner friendly.\r\n- Easy to Implement.\r\n- Supports Slash Commands.\r\n\r\n\r\n## **📚 Usage**\r\n```js\r\nconst { Snake } = require('discord-gamecord')\r\n\r\nnew Snake({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Snake Game',\r\n    color: '#5865F2',\r\n    overTitle: 'Game Over',\r\n  },\r\n  snake: { head: '🟢', body: '🟩', tail: '🟢' },\r\n  emojis: {\r\n    board: '⬛', \r\n    food: '🍎',\r\n    up: '⬆️', \r\n    right: '➡️',\r\n    down: '⬇️',\r\n    left: '⬅️',\r\n  },\r\n}).startGame()\r\n```\r\n\r\n\r\n## **✏️ Example**\r\n### **Looking for Examples? click here:** [**Examples!**](https://discord-gamecord.js.org/docs/gamecord/master/general/welcome)\r\n\r\n```js\r\nconst Discord = require('discord.js');\r\nconst client = new Discord.Client();\r\nconst { Snake } = require('discord-gamecord');\r\n\r\n\r\nclient.on('messageCreate', async (message) => {\r\n  if(message.content === '!snake') {\r\n    new Snake({\r\n      message: message,\r\n      slash_command: false,\r\n      embed: {\r\n        title: 'Snake Game',\r\n        color: '#5865F2',\r\n        overTitle: 'Game Over',\r\n      },\r\n      snake: { head: '🟢', body: '🟩', tail: '🟢' },\r\n      emojis: {\r\n        board: '⬛',\r\n        food: '🍎',\r\n        up: '⬆️', \r\n        down: '⬇️',\r\n        right: '➡️',\r\n        left: '⬅️',\r\n      }\r\n    }).startGame();\r\n  }\r\n});\r\n\r\nclient.login('YOUR_COOL_DISCORD_BOT_TOKEN');\r\n```\r\n\r\n## **📷 Preview**\r\n![](https://cdn.discordapp.com/attachments/818900078077018162/894099405051932712/example.png)\r\n\r\n## **❔ Support**\r\n[![discordBadge](https://invidget.switchblade.xyz/GaczkwfgV9)](https://discord.gg/invite/GaczkwfgV9)\r\n",
+          "path": "docs/general/welcome.md"
+        }
+      }
+    },
+    "games": {
+      "name": "Games",
+      "files": {
+        "Snake": {
+          "name": "Snake",
+          "type": "md",
+          "content": "# 🐍 Snake Game\r\n\r\n```js\r\nconst { Snake } = require('discord-gamecord')\r\n\r\nnew Snake({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Snake',\r\n    color: '#5865F2',\r\n    overTitle: 'Game Over',\r\n  },\r\n  snake: { head: '🟢', body: '🟩', tail: '🟢', over: '💀' },\r\n  emojis: {\r\n    board: '⬛', \r\n    food: '🍎',\r\n    up: '⬆️', \r\n    right: '➡️',\r\n    down: '⬇️',\r\n    left: '⬅️',\r\n  },\r\n  foods: ['🍎', '🍇', '🍊'],\r\n  stopButton: 'Stop',\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n}).startGame();\r\n```",
+          "path": "docs/games/Snake.md"
+        },
+        "8ball": {
+          "name": "8ball",
+          "type": "md",
+          "content": "# 🎱 The Magic 8Ball\r\n\r\n```js\r\nconst { EightBall } = require('discord-gamecord')\r\nconst question = 'What\\'s going on?'\r\n\r\nnew EightBall({\r\n\tmessage: message,\r\n\tquestion: question,\r\n\tslash_command: false,\r\n\tembed: {\r\n\t\ttitle: '🎱 8Ball',\r\n\t\tcolor: '#5865F2'\r\n\t}\r\n}).startGame();\r\n```",
+          "path": "docs/games/8ball.md"
+        },
+        "Connect4": {
+          "name": "Connect 4",
+          "type": "md",
+          "content": "# 🧩 Connect 4\r\n\r\n```js\r\nconst { Connect4 } = require('discord-gamecord')\r\n\r\nnew Connect4({\r\n  message: message,\r\n  slash_command: false,\r\n  opponent: message.mentions.users.first(),\r\n  embed: {\r\n    title: 'Connect 4',\r\n    color: '#5865F2',\r\n  },\r\n  emojis: {\r\n    player1: '🔵',\r\n    player2: '🟡'\r\n  },\r\n  waitMessage: 'Waiting for the opponent...',\r\n  turnMessage: '{emoji} | Its turn of player **{player}**.',\r\n  winMessage: '{emoji} | **{winner}** won the game!',\r\n  gameEndMessage: 'The game went unfinished :(',\r\n  drawMessage: 'It was a draw!',\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Connect 4!',\r\n  cancelMessage: 'Looks like they refused to have a game of Connect4. \\:(',\r\n  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',\r\n}).startGame()\r\n```\r\n\r\n## Slash Commands\r\n```js\r\nmessage: interaction,\r\nslash_command: true,\r\nopponent: interaction.options.getUser('user')\r\n```\r\n",
+          "path": "docs/games/Connect4.md"
+        },
+        "Emojify": {
+          "name": "Emojify",
+          "type": "md",
+          "content": "# 😄 Emojify \r\n\r\n```js\r\nconst { Emojify } = require('discord-gamecord');\r\nconst Text = 'Discord Gamecord';\r\n\r\n<channel>.send(await Emojify(Text));\r\n```",
+          "path": "docs/games/Emojify.md"
+        },
+        "Fishy": {
+          "name": "Fishy",
+          "type": "md",
+          "content": "# 🐟 Fishy\r\n\r\n```js\r\nconst { Fishy } = require('discord-gamecord')\r\n\r\nnew Fishy({\r\n  message: message,\r\n  fishyMessage: 'You caught a {fish}. I bet it\\'d sell for around ${worth}.',\r\n  returnMessage: false\r\n}).startGame();\r\n```",
+          "path": "docs/games/Fishy.md"
+        },
+        "GuessThePokemon": {
+          "name": "Guess The Pokemon",
+          "type": "md",
+          "content": "# 🧩 Guess The Pokemon\r\n\r\n```js\r\nconst { GuessThePokemon } = require('discord-gamecord')\r\n\r\nnew GuessThePokemon({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Who\\'s This Pokemon?',\r\n    footer: 'You have only 1 chance',\r\n    color: '#5865F2',\r\n  },\r\n  time: 60000,\r\n  thinkMessage: '**Thinking...**',\r\n  winMessage: 'Nice! The pokemon was **{pokemon}**',\r\n  stopMessage: 'Better luck next time! It was a **{pokemon}**',\r\n  incorrectMessage: 'Nope! The pokemon was **{pokemon}**',\r\n}).startGame();\r\n```",
+          "path": "docs/games/GuessThePokemon.md"
+        },
+        "reverseText": {
+          "name": "Reverse Text",
+          "type": "md",
+          "content": "# ⏪ Reverse Text\r\n\r\n```js\r\nconst { reverseText } = require('discord-gamecord');\r\nconst Text = 'Discord Gamecord';\r\n\r\n<channel>.send(await reverseText(Text));\r\n```",
+          "path": "docs/games/reverseText.md"
+        },
+        "RockPaperScissors": {
+          "name": "Rock Paper Scissors",
+          "type": "md",
+          "content": "# 🧩 Rock Paper Scissors\r\n\r\n```js\r\nconst { RockPaperScissors } = require('discord-gamecord')\r\n\r\nnew RockPaperScissors({\r\n  message: message,\r\n  slash_command: false,\r\n  opponent: message.mentions.users.first(),\r\n  embed: {\r\n    title: 'Rock Paper Scissors',\r\n    description: 'Press a button below to make a choice!',\r\n    color: '#5865F2',\r\n  },\r\n  buttons: {\r\n    rock: 'Rock',\r\n    paper: 'Paper',\r\n    scissors: 'Scissors',\r\n  },\r\n  emojis: {\r\n    rock: '🌑',\r\n    paper: '📃',\r\n    scissors: '✂️',\r\n  },\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n  chooseMessage: 'You choose {emoji}!',\r\n  noChangeMessage: 'You cannot change your selection!',\r\n  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Rock Paper Scissors!',\r\n  cancelMessage: 'Looks like they refused to have a game of Rock Paper Scissors. \\:(',\r\n  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',\r\n  drawMessage: 'It was a draw!',\r\n  winMessage: '{winner} won the game!',\r\n  gameEndMessage: 'The game went unfinished :(',\r\n}).startGame();\r\n```\r\n\r\n## Slash Commands\r\n```js\r\nmessage: interaction,\r\nslash_command: true,\r\nopponent: interaction.options.getUser('user')\r\n```",
+          "path": "docs/games/RockPaperScissors.md"
+        },
+        "Slots": {
+          "name": "Slots",
+          "type": "md",
+          "content": "# 🎰 Slots\r\n\r\n```js\r\nconst { Slots } = require('discord-gamecord')\r\n\r\nnew Slots({\r\n\tmessage: message,\r\n\tslash_command: false,\r\n\tembed: {\r\n\t\ttitle: '🎰 Slot Machine',\r\n\t\tcolor: '#5865F2'\r\n\t}\r\n}).startGame();\r\n```",
+          "path": "docs/games/Slots.md"
+        },
+        "Tic-Tac-Toe": {
+          "name": "Tic Tac Toe",
+          "type": "md",
+          "content": "# 🧩 Tic Tac Toe\r\n\r\n```js\r\nconst { TicTacToe } = require('discord-gamecord')\r\n\r\nnew TicTacToe({\r\n  message: message,\r\n  slash_command: false,\r\n  opponent: message.mentions.users.first(),\r\n  embed: {\r\n    title: 'Tic Tac Toe',\r\n    overTitle: 'Game Over',\r\n    color: '#5865F2',\r\n  },\r\n  oEmoji: '🔵',\r\n  xEmoji: '❌',\r\n  blankEmoji: '➖',\r\n  oColor: 'PRIMARY',\r\n  xColor: 'DANGER',\r\n  waitMessage: 'Waiting for the opponent...',\r\n  turnMessage: '{emoji} | Its now **{player}** turn!',\r\n  askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Tic Tac Toe!',\r\n  cancelMessage: 'Looks like they refused to have a game of Tic Tac Toe. \\:(',\r\n  timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',\r\n  drawMessage: 'It was a draw!',\r\n  winMessage: '{emoji} | **{winner}** won the game!',\r\n  gameEndMessage: 'The game went unfinished :(',\r\n}).startGame();\r\n```\r\n\r\n```\r\n❄️ Availiable Colors: | BLURPLE - PRIMARY | GREY - SECONDARY | RED - DANGER | GREEN - SUCCESS\r\n```\r\n\r\n## Slash Commands\r\n```js\r\nmessage: interaction,\r\nslash_command: true,\r\nopponent: interaction.options.getUser('user')\r\n```",
+          "path": "docs/games/Tic-Tac-Toe.md"
+        },
+        "Trivia": {
+          "name": "Trivia",
+          "type": "md",
+          "content": "# ❔ Trivia\r\n\r\n```js\r\nconst { Trivia } = require('discord-gamecord')\r\n\r\nnew Trivia({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Trivia',\r\n    description: 'You have {time} seconds to respond!',\r\n    color: '#5865F2',\r\n  },\r\n  difficulty: 'medium',\r\n  winMessage: 'GG, Your answer was correct! It was **{answer}**',\r\n  loseMessage: 'Your answer was Incorrect! The correct answer was **{answer}**',\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n}).startGame();\r\n```",
+          "path": "docs/games/Trivia.md"
+        },
+        "WouldYouRather": {
+          "name": "Would You Rather",
+          "type": "md",
+          "content": "# 🧩 Would You Rather\r\n\r\n```js\r\nconst { WouldYouRather } = require('discord-gamecord')\r\n\r\nnew WouldYouRather({\r\n  message: message,\r\n  slash_command: false,\r\n  embed: {\r\n    title: 'Would You Rather',\r\n    color: '#5865F2',\r\n  },\r\n  thinkMessage: '**Thinking...**',\r\n  buttons: { option1: 'Option 1', option2: 'Option 2' },\r\n  othersMessage: 'You are not allowed to use buttons for this message!',\r\n}).startGame();\r\n```",
+          "path": "docs/games/WouldYouRather.md"
+        }
+      }
+    }
+  },
+  "classes": [],
+  "interfaces": [],
+  "typedefs": [],
+  "externals": []
+}
