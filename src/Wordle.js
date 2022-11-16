@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const words = require('../utils/words.json');
 const events = require('events');
 
@@ -46,7 +46,7 @@ module.exports = class Wordle extends events {
 
   async getBoardImage() {
     const guess = this.guessed.length ? '&guessed='+this.guessed.join(',') : '';
-    return await new MessageAttachment('https://api.aniket091.xyz/wordle?word=' + this.word + guess, 'wordle.png');
+    return await new AttachmentBuilder('https://api.aniket091.xyz/wordle?word=' + this.word + guess, { name: 'wordle.png' });
   }
 
 
@@ -58,7 +58,7 @@ module.exports = class Wordle extends events {
     if (!this.word) this.word = words['wordle'][Math.floor(Math.random() * words['wordle'].length)];
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setImage('attachment://wordle.png')
@@ -91,7 +91,7 @@ module.exports = class Wordle extends events {
     this.emit('gameOver', { result: (this.guessed.includes(this.word) ? 'win' : 'lose'), ...WordleGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setImage('attachment://wordle.png')

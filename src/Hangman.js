@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { getAlphaEmoji, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { getAlphaEmoji, formatMessage, buttonStyle } = require('../utils/utils');
 const words = require('../utils/words.json');
 const events = require('events');
 
@@ -91,7 +91,7 @@ module.exports = class Hangman extends events {
     }
 
     
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
@@ -124,7 +124,7 @@ module.exports = class Hangman extends events {
       if (this.damage > 4 || this.foundWord()) return collector.stop();
 
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor(this.options.embed.color)
       .setTitle(this.options.embed.title)
       .setDescription(this.getBoardContent())
@@ -147,7 +147,7 @@ module.exports = class Hangman extends events {
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...HangmanGame });
 
     
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
@@ -175,11 +175,11 @@ module.exports = class Hangman extends events {
     const pageID = ('hangman_' + (this.buttonPage ? 0 : 1));
 
     for (let y = 0; y < 3; y++) {
-      const row = new MessageActionRow();
+      const row = new ActionRowBuilder();
       for (let x = 0; x < 4; x++) {
         
         const letter = letters[y * 4 + x];
-        const btn = new MessageButton().setStyle('PRIMARY').setLabel(letter).setCustomId(`hangman_${letter}`)
+        const btn = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel(letter).setCustomId(`hangman_${letter}`)
         .setDisabled(this.guessed.includes(letter));
         row.addComponents(btn);
       }
@@ -187,16 +187,17 @@ module.exports = class Hangman extends events {
     }
 
 
-    const row4 = new MessageActionRow();
-    const stop = new MessageButton().setStyle('DANGER').setLabel('Stop').setCustomId('hangman_stop');
-    const pageBtn = new MessageButton().setStyle('SUCCESS').setEmoji(this.buttonPage ? '⬅️' : '➡️').setCustomId(pageID);
-    const letterY = new MessageButton().setStyle('PRIMARY').setLabel('Y').setCustomId('hangman_Y');
-    const letterZ = new MessageButton().setStyle('PRIMARY').setLabel('Z').setCustomId('hangman_Z');
+    const row4 = new ActionRowBuilder();
+    const stop = new ButtonBuilder().setStyle(buttonStyle('DANGER')).setLabel('Stop').setCustomId('hangman_stop');
+    const pageBtn = new ButtonBuilder().setStyle(buttonStyle('SUCCESS')).setEmoji(this.buttonPage ? '⬅️' : '➡️').setCustomId(pageID);
+    const letterY = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Y').setCustomId('hangman_Y');
+    const letterZ = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Z').setCustomId('hangman_Z');
 
     if (this.guessed.includes('Y')) letterY.setDisabled(true);
     if (this.guessed.includes('Z')) letterZ.setDisabled(true);
     
-    row4.addComponents(pageBtn, stop, (this.buttonPage ? [letterY, letterZ] : []));
+    row4.addComponents(pageBtn, stop);
+    if (this.buttonPage) row4.addComponents(letterY, letterZ);
     components.push(row4);
     return components;
   }

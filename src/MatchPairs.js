@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { disableButtons, shuffleArray, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
 
 
@@ -68,7 +68,7 @@ module.exports = class MatchPairs extends events {
     this.components = this.getComponents();
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description)
@@ -94,10 +94,11 @@ module.exports = class MatchPairs extends events {
   getComponents() {
     const components = [];
     for (let y = 0; y < this.length; y++) {
-      const row = new MessageActionRow();
+      const row = new ActionRowBuilder();
       for (let x = 0; x < this.length; x++) {
-        const btn = new MessageButton().setStyle('SECONDARY').setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
-        btn.removeLabel = function() { this.label = null; return this; };
+        const btn = new ButtonBuilder().setStyle(buttonStyle('SECONDARY')).setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
+        btn.removeLabel = function() { this.data.label = null; return this; };
+        btn.removeEmoji = function() { this.data.emoji = null; return this; };
         row.addComponents(btn);
       }
       components.push(row);
@@ -112,7 +113,7 @@ module.exports = class MatchPairs extends events {
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...MatchPairsGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(GameOverMessage.replace('{tilesTurned}', this.tilesTurned))
@@ -143,11 +144,11 @@ module.exports = class MatchPairs extends events {
       
       if (!this.selected) {
         this.selected = { x: x, y: y, id: id };
-        emojiBtn.setEmoji(emoji).setStyle('PRIMARY').removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle(buttonStyle('PRIMARY')).removeLabel();
       }
       else if (this.selected.id === id) {
         this.selected = null;
-        emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
+        emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
       }
       else {
         const selectedEmoji = this.emojis[this.selected.id];
@@ -160,17 +161,17 @@ module.exports = class MatchPairs extends events {
           const pair = this.getPairEmoji(this.emojis[joker.id]).filter(b => b.id !== joker.id)[0];
           const pairBtn = this.components[pair.y].components[pair.x];
 
-          pairBtn.setEmoji(this.emojis[pair.id]).setStyle('SUCCESS').setDisabled(true).removeLabel();
+          pairBtn.setEmoji(this.emojis[pair.id]).setStyle(buttonStyle('SUCCESS')).setDisabled(true).removeLabel();
         }
 
 
-        emojiBtn.setEmoji(emoji).setStyle(matched ? 'SUCCESS' : 'DANGER').setDisabled(matched).removeLabel();
-        selectedBtn.setEmoji(selectedEmoji).setStyle(matched ? 'SUCCESS' : 'DANGER').setDisabled(matched).removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
+        selectedBtn.setEmoji(selectedEmoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
 
         if (!matched) {
           await msg.edit({ components: this.components });
-          emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
-          selectedBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
+          emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
+          selectedBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
           return this.selected = null;;
         }
 

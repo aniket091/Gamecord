@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { disableButtons, shuffleArray, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
 
 
@@ -71,7 +71,7 @@ module.exports = class FindEmoji extends events {
     this.emoji = this.emojis[Math.floor(Math.random() * this.emojis.length)];
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description)
@@ -110,7 +110,7 @@ module.exports = class FindEmoji extends events {
     if (!result) this.selected = this.emoji;
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options[resultMessage+'Message'].replace('{emoji}', this.emoji))
@@ -124,13 +124,14 @@ module.exports = class FindEmoji extends events {
     const components = [];
 
     for (let x = 0; x < 2; x++) {
-      const row = new MessageActionRow();
+      const row = new ActionRowBuilder();
       for (let y = 0; y < 4; y++) {
         const buttonEmoji = this.emojis[x * 4 + y];
 
-        const btn = new MessageButton().setEmoji(showEmoji ? buttonEmoji : null).setCustomId('findEmoji_' + (x*4 + y))
-        .setStyle(buttonEmoji === this.selected ? (this.selected === this.emoji ? 'SUCCESS' : 'DANGER') : this.options.buttonStyle);
-        if (!showEmoji) btn.setLabel('\u200b');
+        const btn = new ButtonBuilder().setCustomId('findEmoji_' + (x*4 + y))
+        .setStyle(buttonStyle(buttonEmoji === this.selected ? (this.selected === this.emoji ? 'SUCCESS' : 'DANGER') : this.options.buttonStyle));
+        if (showEmoji) btn.setEmoji(buttonEmoji);
+        else btn.setLabel('\u200b');
         row.addComponents(btn);
       }
       components.push(row);

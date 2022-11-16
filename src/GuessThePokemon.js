@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const fetch = require('node-fetch');
 const events = require('events');
 
@@ -52,7 +52,7 @@ module.exports = class GuessThePokemon extends events {
     this.pokemon = result.data;
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setImage('attachment://question-image.png')
@@ -61,7 +61,7 @@ module.exports = class GuessThePokemon extends events {
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
 
-    const attachment = new MessageAttachment(this.pokemon.questionImage, 'question-image.png');
+    const attachment = new AttachmentBuilder(this.pokemon.questionImage, { name: 'question-image.png' });
     const msg = await this.sendMessage({ embeds: [embed], files: [attachment] });
 
     const filter = (m) => m.author.id === this.message.author.id;
@@ -85,7 +85,7 @@ module.exports = class GuessThePokemon extends events {
     if (!result) return msg.edit({ content: this.options.loseMessage.replace('{pokemon}', this.pokemon.name), embeds: [], attachments: [] });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setImage('attachment://answer-image.png')
@@ -93,7 +93,7 @@ module.exports = class GuessThePokemon extends events {
     .addFields({ name: 'Abilities', value: this.pokemon.abilities.join(', ') ?? 'No Data', inline: true })
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    const attachment = new MessageAttachment(this.pokemon.answerImage, 'answer-image.png');
+    const attachment = new AttachmentBuilder(this.pokemon.answerImage, { name: 'answer-image.png' });
     return msg.edit({ content: this.options.winMessage.replace('{pokemon}', this.pokemon.name), embeds: [embed], files: [attachment] });
   }
 }

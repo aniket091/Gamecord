@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const events = require('events');
 
 
@@ -53,7 +53,7 @@ module.exports = class FastType extends events {
     }
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description.replace('{time}', (this.options.timeoutTime/1000)))
@@ -88,7 +88,7 @@ module.exports = class FastType extends events {
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), FasttypeGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(GameOverMessage.replace('{time}', Math.floor((this.timeTaken / 1000) % 60)).replace('{wpm}', this.wpm))

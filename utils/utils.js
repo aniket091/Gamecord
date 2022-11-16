@@ -1,8 +1,11 @@
+const { ButtonBuilder } = require('discord.js');
+
 module.exports = {
   disableButtons(components) {
     for (let x = 0; x < components.length; x++) {
       for (let y = 0; y < components[x].components.length; y++) {
-        components[x].components[y].disabled = true;
+        components[x].components[y] = ButtonBuilder.from(components[x].components[y]);
+        components[x].components[y].setDisabled(true);
       }
     }
 
@@ -12,6 +15,13 @@ module.exports = {
   getNumEmoji(number) {
     const numEmoji = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
     return numEmoji[number];
+  },
+
+  buttonStyle(style) {
+    if (style === 'PRIMARY') return 1;
+    else if (style === 'SUCCESS') return 3;
+    else if (style === 'DANGER') return 4;
+    return 2;
   },
 
   formatMessage(options, contentMsg, isOpp) {

@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow, MessageAttachment } = require('discord.js');
-const { disableButtons, formatMessage, move, oppDirection } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder } = require('discord.js');
+const { disableButtons, formatMessage, move, oppDirection, buttonStyle } = require('../utils/utils');
 const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 const events = require('events');
 
@@ -25,7 +25,7 @@ module.exports = class TwoZeroFourEight extends events {
     
     if (!options.timeoutTime) options.timeoutTime = 60000;
     if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
-    
+
 
     if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
     if (typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
@@ -66,7 +66,7 @@ module.exports = class TwoZeroFourEight extends events {
 
   async getBoardImage() {
     const url = 'https://api.aniket091.xyz/2048?board=' + this.gameBoard.map(c => chars[c]).join('');
-    return await new MessageAttachment(url, 'gameboard.png');
+    return await new AttachmentBuilder(url, { name: 'gameboard.png' });
   }
 
 
@@ -79,18 +79,19 @@ module.exports = class TwoZeroFourEight extends events {
     this.placeRandomTile();
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setTitle(this.options.embed.title)
     .setColor(this.options.embed.color)
     .setImage('attachment://gameboard.png')
     .addFields({ name: 'Current Score', value: this.score.toString() })
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    const up = new MessageButton().setEmoji(this.options.emojis.up).setStyle(this.options.buttonStyle).setCustomId('2048_up');
-    const down = new MessageButton().setEmoji(this.options.emojis.down).setStyle(this.options.buttonStyle).setCustomId('2048_down');
-    const left = new MessageButton().setEmoji(this.options.emojis.left).setStyle(this.options.buttonStyle).setCustomId('2048_left');
-    const right = new MessageButton().setEmoji(this.options.emojis.right).setStyle(this.options.buttonStyle).setCustomId('2048_right');
-    const row = new MessageActionRow().addComponents(up, down, left, right);
+    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    const up = new ButtonBuilder().setEmoji(this.options.emojis.up).setStyle(this.options.buttonStyle).setCustomId('2048_up');
+    const down = new ButtonBuilder().setEmoji(this.options.emojis.down).setStyle(this.options.buttonStyle).setCustomId('2048_down');
+    const left = new ButtonBuilder().setEmoji(this.options.emojis.left).setStyle(this.options.buttonStyle).setCustomId('2048_left');
+    const right = new ButtonBuilder().setEmoji(this.options.emojis.right).setStyle(this.options.buttonStyle).setCustomId('2048_right');
+    const row = new ActionRowBuilder().addComponents(up, down, left, right);
 
 
     const msg = await this.sendMessage({ embeds: [embed], components: [row], files: [await this.getBoardImage()] });
@@ -129,7 +130,7 @@ module.exports = class TwoZeroFourEight extends events {
       if (this.isGameOver()) return collector.stop();
 
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setTitle(this.options.embed.title)
       .setColor(this.options.embed.color)
       .setImage('attachment://gameboard.png')
@@ -151,7 +152,7 @@ module.exports = class TwoZeroFourEight extends events {
     const TwoZeroFourEightGame = { player: this.message.author, score: this.score };
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...TwoZeroFourEightGame });
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setTitle(this.options.embed.title)
     .setColor(this.options.embed.color)
     .setImage('attachment://gameboard.png')

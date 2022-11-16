@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { formatMessage, buttonStyle } = require('../utils/utils');
 const fetch = require('node-fetch');
 const events = require('events');
 
@@ -64,7 +64,7 @@ module.exports = class WouldYouRather extends events {
     if (!this.data.title) return this.sendMessage({ content: this.options.errMessage });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(`1. ${this.data.option1} \n2. ${this.data.option2}`)
@@ -72,9 +72,10 @@ module.exports = class WouldYouRather extends events {
     .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
 
 
-    const btn1 = new MessageButton().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option1).setCustomId('wyr_1').setEmoji('1️⃣');
-    const btn2 = new MessageButton().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option2).setCustomId('wyr_2').setEmoji('2️⃣');
-    const row = new MessageActionRow().addComponents(btn1, btn2);
+    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    const btn1 = new ButtonBuilder().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option1).setCustomId('wyr_1').setEmoji('1️⃣');
+    const btn2 = new ButtonBuilder().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option2).setCustomId('wyr_2').setEmoji('2️⃣');
+    const row = new ActionRowBuilder().addComponents(btn1, btn2);
 
     const msg = await this.sendMessage({ embeds: [embed], components: [row] });
     const collector = msg.createMessageComponentCollector({ });
@@ -101,7 +102,7 @@ module.exports = class WouldYouRather extends events {
     const prnt2 = Math.floor(parseInt(this.data.option2_votes) / (parseInt(this.data.option1_votes) + parseInt(this.data.option2_votes)) * 100);
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })

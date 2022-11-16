@@ -19,7 +19,7 @@
 
 ## **⚙️ Installation** 
 ```
-npm i discord-gamecord@v3-lts
+npm i discord-gamecord
 ```
 
 

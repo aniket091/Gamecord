@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const events = require('events');
 
 
@@ -57,7 +57,7 @@ module.exports = class Slots extends events {
     this.slotMachine();
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
@@ -81,7 +81,7 @@ module.exports = class Slots extends events {
     this.emit('gameOver', { result: (this.hasWon() ? 'win':'lose'), ...SlotsGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent(true))

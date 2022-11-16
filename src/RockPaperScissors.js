@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { formatMessage, buttonStyle } = require('../utils/utils');
 const approve = require('../utils/approve');
 
 
@@ -94,16 +94,17 @@ module.exports = class RPSGame extends approve {
     const labels = this.options.buttons;
     const choice = { r: emojis.rock, p: emojis.paper, s: emojis.scissors };
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description)
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
 
-    const r = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.r).setCustomId('rps_r').setLabel(labels.rock);
-    const p = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.p).setCustomId('rps_p').setLabel(labels.paper);
-    const s = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.s).setCustomId('rps_s').setLabel(labels.scissors);
-    const row = new MessageActionRow().addComponents(r, p, s);
+    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    const r = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(choice.r).setCustomId('rps_r').setLabel(labels.rock);
+    const p = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(choice.p).setCustomId('rps_p').setLabel(labels.paper);
+    const s = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(choice.s).setCustomId('rps_s').setLabel(labels.scissors);
+    const row = new ActionRowBuilder().addComponents(r, p, s);
 
     await msg.edit({ embeds: [embed], components: [row] });
     const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
@@ -152,7 +153,7 @@ module.exports = class RPSGame extends approve {
     this.emit('gameOver', { result, ...RPSGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })

@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { disableButtons, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
 const squares = ['🟥', '🟦', '🟧', '🟪', '🟩'];
 const events = require('events');
 
@@ -81,19 +81,20 @@ module.exports = class Flood extends events {
     this.maxTurns = Math.floor((25 * (this.length * 2)) / 26);
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
     .addFields({ name: 'Turns', value: `${this.turns}/${this.maxTurns}` })
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    const btn1 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(squares[0]).setCustomId('flood_0');
-    const btn2 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(squares[1]).setCustomId('flood_1');
-    const btn3 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(squares[2]).setCustomId('flood_2');
-    const btn4 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(squares[3]).setCustomId('flood_3');
-    const btn5 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(squares[4]).setCustomId('flood_4');
-    const row = new MessageActionRow().addComponents(btn1, btn2, btn3, btn4, btn5);
+    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    const btn1 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[0]).setCustomId('flood_0');
+    const btn2 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[1]).setCustomId('flood_1');
+    const btn3 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[2]).setCustomId('flood_2');
+    const btn4 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[3]).setCustomId('flood_3');
+    const btn5 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[4]).setCustomId('flood_4');
+    const row = new ActionRowBuilder().addComponents(btn1, btn2, btn3, btn4, btn5);
 
     const msg = await this.sendMessage({ embeds: [embed], components: [row] });
     const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
@@ -111,7 +112,7 @@ module.exports = class Flood extends events {
       if (update === false) return;
 
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor(this.options.embed.color)
       .setTitle(this.options.embed.title)
       .setDescription(this.getBoardContent())
@@ -134,7 +135,7 @@ module.exports = class Flood extends events {
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...FloodGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())

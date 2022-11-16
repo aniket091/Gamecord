@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { formatMessage } = require('./utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { formatMessage, buttonStyle } = require('./utils');
 const events = require('events');
 
 
@@ -37,14 +37,14 @@ module.exports = class Approve extends events {
   async approve() {
     return new Promise(async resolve => {
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor(this.options.embed.requestColor)
       .setTitle(this.options.embed.requestTitle)
       .setDescription(formatMessage(this.options, 'requestMessage'));
 
-      const btn1 = new MessageButton().setLabel(this.options.buttons.accept).setCustomId('approve_accept').setStyle('SUCCESS');
-      const btn2 = new MessageButton().setLabel(this.options.buttons.reject).setCustomId('approve_reject').setStyle('DANGER');
-      const row = new MessageActionRow().addComponents(btn1, btn2);
+      const btn1 = new ButtonBuilder().setLabel(this.options.buttons.accept).setCustomId('approve_accept').setStyle(buttonStyle('SUCCESS'));
+      const btn2 = new ButtonBuilder().setLabel(this.options.buttons.reject).setCustomId('approve_reject').setStyle(buttonStyle('DANGER'));
+      const row = new ActionRowBuilder().addComponents(btn1, btn2);
 
       const msg = await this.sendMessage({ embeds: [embed], components: [row] });
       const collector = msg.createMessageComponentCollector({ time: this.options.reqTimeoutTime });
@@ -58,7 +58,7 @@ module.exports = class Approve extends events {
       collector.on('end', async (_, reason) => {
         if (reason === 'accept') return resolve(msg);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
         .setColor(this.options.embed.rejectColor)
         .setTitle(this.options.embed.rejectTitle)
         .setDescription(formatMessage(this.options, 'rejectMessage'))

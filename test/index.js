@@ -35,4 +35,4 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-client.login('YOUR_COOL_DISCORD_BOT_TOKEN');
+client.login('DISCORD_BOT_TOKEN');

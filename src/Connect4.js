@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
-const { disableButtons, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
 const approve = require('../utils/approve');
 
 
@@ -99,22 +99,23 @@ module.exports = class Connect4 extends approve {
 
   async connect4Game(msg) {
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
     .addFields({ name: this.options.embed.statusTitle, value: this.getTurnMessage() })
     .setFooter({ text: `${this.message.author.tag} vs ${this.opponent.tag}` })
 
-    const btn1 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('1️⃣').setCustomId('connect4_1');
-    const btn2 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('2️⃣').setCustomId('connect4_2');
-    const btn3 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('3️⃣').setCustomId('connect4_3');
-    const btn4 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('4️⃣').setCustomId('connect4_4');
-    const btn5 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('5️⃣').setCustomId('connect4_5');
-    const btn6 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('6️⃣').setCustomId('connect4_6');
-    const btn7 = new MessageButton().setStyle(this.options.buttonStyle).setEmoji('7️⃣').setCustomId('connect4_7');
-    const row1 = new MessageActionRow().addComponents(btn1, btn2, btn3, btn4);
-    const row2 = new MessageActionRow().addComponents(btn5, btn6, btn7);
+    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    const btn1 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('1️⃣').setCustomId('connect4_1');
+    const btn2 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('2️⃣').setCustomId('connect4_2');
+    const btn3 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('3️⃣').setCustomId('connect4_3');
+    const btn4 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('4️⃣').setCustomId('connect4_4');
+    const btn5 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('5️⃣').setCustomId('connect4_5');
+    const btn6 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('6️⃣').setCustomId('connect4_6');
+    const btn7 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji('7️⃣').setCustomId('connect4_7');
+    const row1 = new ActionRowBuilder().addComponents(btn1, btn2, btn3, btn4);
+    const row2 = new ActionRowBuilder().addComponents(btn5, btn6, btn7);
 
     await msg.edit({ embeds: [embed], components: [row1, row2] });
     return this.handleButtons(msg);
@@ -156,7 +157,7 @@ module.exports = class Connect4 extends approve {
       this.player1Turn = !this.player1Turn;
 
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor(this.options.embed.color)
       .setTitle(this.options.embed.title)
       .setDescription(this.getBoardContent())
@@ -180,7 +181,7 @@ module.exports = class Connect4 extends approve {
     this.emit('gameOver',  { result: result, ...Connect4Game });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())

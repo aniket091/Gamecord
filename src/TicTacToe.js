@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { disableButtons, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
 const approve = require('../utils/approve');
 
 
@@ -86,7 +86,7 @@ module.exports = class TicTacToe extends approve {
 
   async TicTacToeGame(msg) {
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
@@ -116,7 +116,7 @@ module.exports = class TicTacToe extends approve {
       this.player1Turn = !this.player1Turn;  
 
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor(this.options.embed.color)
       .setTitle(this.options.embed.title)
       .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
@@ -138,7 +138,7 @@ module.exports = class TicTacToe extends approve {
     this.emit('gameOver', { result: result, ...TicTacToeGame });
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
@@ -192,11 +192,11 @@ module.exports = class TicTacToe extends approve {
     const components = [];
 
     for (let x = 0; x < 3; x++) {
-      const row = new MessageActionRow();
+      const row = new ActionRowBuilder();
       for (let y = 0; y < 3; y++) {
 
         const button = this.getButton(this.gameBoard[y * 3 + x]);
-        const btn = new MessageButton().setEmoji(button.emoji).setStyle(button.style).setCustomId('TicTacToe_' + (y * 3 + x));
+        const btn = new ButtonBuilder().setEmoji(button.emoji).setStyle(buttonStyle(button.style)).setCustomId('TicTacToe_' + (y * 3 + x));
         if (this.gameBoard[y * 3 + x] !== 0) btn.setDisabled(true);
         row.addComponents(btn);
       }

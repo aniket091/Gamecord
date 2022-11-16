@@ -8,7 +8,7 @@ module.exports = function (content) {
   })
 
   return content.join('');
-}
+} 
 
 
 module.exports.chars = {

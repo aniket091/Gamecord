@@ -1,5 +1,5 @@
-const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js');
-const { disableButtons , getNumEmoji, formatMessage } = require('../utils/utils');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons , getNumEmoji, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
 
 
@@ -75,7 +75,7 @@ module.exports = class Minesweeper extends events {
     this.showFirstBlock();
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description)
@@ -128,7 +128,7 @@ module.exports = class Minesweeper extends events {
     }
 
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(result ? this.options.winMessage : this.options.loseMessage)
@@ -198,19 +198,19 @@ module.exports = class Minesweeper extends events {
     const components = [];
 
     for (let y = 0; y < this.length; y++) {
-      const row = new MessageActionRow();
+      const row = new ActionRowBuilder();
       for (let x = 0; x < this.length; x++) {
 
         const block = this.gameBoard[y * 5 + x];
         const isNumber = getNumEmoji(block || null);
         const displayMine = (block === true && showMines);
 
-        const btn = new MessageButton()
-        .setEmoji(displayMine ? (found ? this.emojis.flag : this.emojis.mine) : (isNumber || null))
-        .setStyle(displayMine ? (found ? 'SUCCESS' : 'DANGER') : (isNumber || block === 0 ? 'SECONDARY' : 'PRIMARY'))
+        const btn = new ButtonBuilder()
+        .setStyle(buttonStyle(displayMine ? (found ? 'SUCCESS' : 'DANGER') : (isNumber || block === 0 ? 'SECONDARY' : 'PRIMARY')))
         .setCustomId('minesweeper_' + x + '_' + y)
 
-        if (btn.emoji === null) btn.setLabel(' ');
+        if (displayMine || isNumber) btn.setEmoji(displayMine ? (found ? this.emojis.flag : this.emojis.mine) : isNumber);
+        else btn.setLabel(' ');
         row.addComponents(btn);
       }
       components.push(row);
