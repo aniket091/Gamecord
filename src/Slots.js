@@ -1,67 +1,108 @@
 const { MessageEmbed } = require('discord.js');
-const slots = ['🍇', '🍊', '🍋', '🍌'];
+const events = require('events');
 
 
-module.exports = class SlotsGame {
-    constructor(options = {}) {
-        if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
-        if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')
+module.exports = class Slots extends events {
+  constructor(options = {}) {
 
-        if (!options.slash_command) options.slash_command = false;
-        if (typeof options.slash_command !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: Slash command must be a boolean.')
+    if (!options.isSlashGame) options.isSlashGame = false;
+    if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
+    if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
 
-        if (!options.embed) options.embed = {};
-        if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED_OBJECT: Embed arguement must be an object.')
-        
-        if (!options.embed.title) options.embed.title = 'Slots';
-        if (typeof options.embed.title !== 'string')  throw new TypeError('INVALID_TITLE: Embed Title must be a string.')
 
-        if (!options.embed.color) options.embed.color = '#5865F2';
-        if (typeof options.embed.color !== 'string')  throw new TypeError('INVALID_COLOR: Embed Color must be a string.')
-        
+    if (!options.embed) options.embed = {};
+    if (!options.embed.title) options.embed.title = 'Slot Machine';
+    if (!options.embed.color) options.embed.color = '#5865F2';
+    if (!options.slots) options.slots = ['🍇', '🍊', '🍋', '🍌'];
 
-        this.message = options.message;
-        this.options = options;
+
+    if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
+    if (typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
+    if (typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
+    if (!Array.isArray(options.slots)) throw new TypeError('INVALID_SLOTS: slots option must be an array.');
+
+    super();
+    this.options = options;
+    this.message = options.message;
+    this.slot1 = this.slot2 = this.slot3 = 0;
+    this.slots = options.slots;
+    this.result = null;
+  }
+
+
+  getBoardContent(showResult) {
+    let board = '```\n-------------------\n';
+    board += `${this.wrap(this.slot1, false)}  :  ${this.wrap(this.slot2, false)}  :  ${this.wrap(this.slot3, false)}\n\n`;
+    board += `${this.slots[this.slot1]}  :  ${this.slots[this.slot2]}  :  ${this.slots[this.slot3]} <\n\n`;
+    board += `${this.wrap(this.slot1, true)}  :  ${this.wrap(this.slot2, true)}  :  ${this.wrap(this.slot3, true)}\n`;
+    board += '-------------------\n';
+
+    if (showResult) board += `| : :   ${(this.hasWon() ? 'WON ' : 'LOST')}   : : |`;
+    return (board + '```');
+  }
+
+
+  async sendMessage(content) {
+    if (this.options.isSlashGame) return await this.message.editReply(content);
+    else return await this.message.channel.send(content);
+  }
+
+
+  async startGame() {
+    if (this.options.isSlashGame) {
+      if (!this.message.deferred) await this.message.deferReply().catch(e => {});
+      this.message.author = this.message.user;
     }
+    this.slotMachine();
 
 
-    async startGame() {
-        if (this.options.slash_command) this.message.author = this.message.user;
+    const embed = new MessageEmbed()
+    .setColor(this.options.embed.color)
+    .setTitle(this.options.embed.title)
+    .setDescription(this.getBoardContent())
+    .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    const msg = await this.sendMessage({ embeds: [embed] });
+    
 
-        const slotOne = Math.floor(Math.random() * slots.length);
-		const slotTwo = Math.floor(Math.random() * slots.length);
-		const slotThree = Math.floor(Math.random() * slots.length);
-
-        let description = '\n------------------\n';
-        description += `${this.wrap(slotOne, false)} : ${this.wrap(slotTwo, false)} : ${this.wrap(slotThree, false)}\n`;
-        description += `${slots[slotOne]} : ${slots[slotTwo]} : ${slots[slotThree]} <\n`;
-        description += `${this.wrap(slotOne, true)} : ${this.wrap(slotTwo, true)} : ${this.wrap(slotThree, true)}\n`;
-        description +=  `------------------\n`;
-        description +=  `| : :  ${slotOne === slotTwo && slotOne === slotThree ? 'WIN!' : 'LOST'}  : : |`
-
-        const embed = new MessageEmbed()
-        .setColor(this.options.embed.color)
-        .setAuthor(this.message.author.tag, this.message.author.displayAvatarURL({ dynamic: true}))
-        .addField(this.options.embed.title, '```' +  description + '```')
+    setTimeout(async () => {
+      this.slotMachine();
+      embed.setDescription(this.getBoardContent());
+      
+      this.slotMachine();
+      await msg.edit({ embeds: [embed] });
+      setTimeout(() => { this.gameOver(msg) }, 2000);
+    }, 2000);
+  }
 
 
-        if (this.options.slash_command) {
-            if (this.message.deferred) {
-                return this.message.editReply({ embeds: [embed] })
-            } else {
-                return this.message.reply({ embeds: [embed] })
-            }
-        } else {
-            return this.message.channel.send({ embeds: [embed] })
-        }
-    }
+  gameOver(msg) {
+    const SlotsGame = { player: this.message.author, slots: [this.slot1, this.slot2, this.slot3].map(s => this.slots[s]) };
+    this.emit('gameOver', { result: (this.hasWon() ? 'win':'lose'), ...SlotsGame });
 
-    wrap(slot, add) {
-		if (add) {
-			if (slot + 1 > slots.length - 1) return slots[0];
-			return slots[slot + 1];
-		}
-		if (slot - 1 < 0) return slots[slots.length - 1];
-		return slots[slot - 1];
-	}
+
+    const embed = new MessageEmbed()
+    .setColor(this.options.embed.color)
+    .setTitle(this.options.embed.title)
+    .setDescription(this.getBoardContent(true))
+    .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+
+    return msg.edit({ embeds: [embed] });
+  }
+
+
+  slotMachine() {
+    this.slot1 = Math.floor(Math.random() * this.slots.length);
+    this.slot2 = Math.floor(Math.random() * this.slots.length);
+    this.slot3 = Math.floor(Math.random() * this.slots.length);
+  }
+
+  hasWon() {
+    return (this.slot1 === this.slot2 && this.slot1 === this.slot3);
+  }
+
+  wrap(s, add) {
+    if (add) return (s+1 > this.slots.length-1) ? this.slots[0] : this.slots[s+1];
+    return (s-1 < 0) ? this.slots[this.slots.length-1] : this.slots[s-1];
+  }
 }

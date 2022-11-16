@@ -1,202 +1,166 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
-const { disableButtons } = require('../utils/utils')
-const verify = require('../utils/verify')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { formatMessage } = require('../utils/utils');
+const approve = require('../utils/approve');
 
 
-module.exports = class RPSGame {
-    constructor(options = {}) {
-        if (!options.message) throw new TypeError('NO_MESSAGE: Please provide a message arguement')
-        if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: Invalid Discord Message object was provided.')
-        if(!options.opponent) throw new TypeError('NO_OPPONENT: Please provide an opponent arguement')
-        if (typeof options.opponent !== 'object') throw new TypeError('INVALID_OPPONENT: Invalid Discord User object was provided.')
-        if (!options.slash_command) options.slash_command = false;
-        if (typeof options.slash_command !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: Slash command must be a boolean.')
+module.exports = class RPSGame extends approve {
+  constructor(options = {}) {
+
+    if (!options.isSlashGame) options.isSlashGame = false;
+    if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
+    if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
+    if (!options.opponent) throw new TypeError('NO_OPPONENT: No opponent option was provided.');
+    if (typeof options.opponent !== 'object') throw new TypeError('INVALID_OPPONENT: opponent option must be an object.');
 
 
-        if (!options.embed) options.embed = {};
-        if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED_OBJECT: Embed arguement must be an object.')
-        if (!options.embed.title) options.embed.title = 'Rock Paper Scissors';
-        if (typeof options.embed.title !== 'string')  throw new TypeError('INVALID_TITLE: Embed Title must be a string.')
-        if (!options.embed.description) options.embed.description = 'Press a button below to make a choice!';
-        if (typeof options.embed.description !== 'string')  throw new TypeError('INVALID_TITLE: Embed Title must be a string.')
-        if (!options.embed.color) options.embed.color = '#5865F2';
-        if (typeof options.embed.color !== 'string')  throw new TypeError('INVALID_COLOR: Embed Color must be a string.')
+    if (!options.embed) options.embed = {};
+    if (!options.embed.title) options.embed.title = 'Rock Paper Scissors';
+    if (!options.embed.color) options.embed.color = '#5865F2';
+    if (!options.embed.description) options.embed.description = 'Press a button below to make a choice.';
+
+    if (!options.buttons) options.buttons = {};
+    if (!options.buttons.rock) options.buttons.rock = 'Rock';
+    if (!options.buttons.paper) options.buttons.paper = 'Paper';
+    if (!options.buttons.scissors) options.buttons.scissors = 'Scissors';
+
+    if (!options.emojis) options.emojis = {};
+    if (!options.emojis.rock) options.emojis.rock = '🌑';
+    if (!options.emojis.paper) options.emojis.paper = '📰';
+    if (!options.emojis.scissors) options.emojis.scissors = '✂️';
+
+    if (!options.timeoutTime) options.timeoutTime = 60000;
+    if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if (!options.pickMessage) options.pickMessage = 'You choose {emoji}.';
+    if (!options.winMessage) options.winMessage = '**{player}** won the Game! Congratulations!';
+    if (!options.tieMessage) options.tieMessage = 'The Game tied! No one won the Game!';
+    if (!options.timeoutMessage) options.timeoutMessage = 'The Game went unfinished! No one won the Game!';
+    if (!options.requestMessage) options.requestMessage = '{player} has invited you for a round of **Rock Paper Scissors**.';
+    if (!options.rejectMessage) options.rejectMessage = 'The player denied your request for a round of **Rock Paper Scissors**.';
 
 
-        if (!options.buttons) options.buttons = {};
-        if (!options.buttons.rock) options.buttons.rock = 'Rock';
-        if (typeof options.buttons.rock !== 'string')  throw new TypeError('INVALID_BUTTON: Rock Button must be a string.')
-        if (!options.buttons.paper) options.buttons.paper = 'Paper';
-        if (typeof options.buttons.paper !== 'string')  throw new TypeError('INVALID_BUTTON: Paper Button must be a string.')
-        if (!options.buttons.scissors) options.buttons.scissors = 'Scissors';
-        if (typeof options.buttons.scissors !== 'string')  throw new TypeError('INVALID_BUTTON: Scissors Button must be a string.')
+    if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
+    if (typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
+    if (typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
+    if (typeof options.embed.description !== 'string') throw new TypeError('INVALID_EMBED: embed description must be a string.');
+    if (typeof options.buttons !== 'object') throw new TypeError('INVALID_BUTTONS: buttons option must be an object.');
+    if (typeof options.buttons.rock !== 'string') throw new TypeError('INVALID_BUTTONS: rock button must be a string.');
+    if (typeof options.buttons.paper !== 'string') throw new TypeError('INVALID_BUTTONS: paper button must be a string.');
+    if (typeof options.buttons.scissors !== 'string') throw new TypeError('INVALID_BUTTONS: scissors button must be a string.');
+    if (typeof options.emojis !== 'object') throw new TypeError('INVALID_EMOJIS: emojis option must be an object.');
+    if (typeof options.emojis.rock !== 'string') throw new TypeError('INVALID_EMOJIS: rock emoji must be a string.');
+    if (typeof options.emojis.paper !== 'string') throw new TypeError('INVALID_EMOJIS: paper emoji must be a string.');
+    if (typeof options.emojis.scissors !== 'string') throw new TypeError('INVALID_EMOJIS: scissors emoji must be a string.');
+    if (typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
+    if (typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
+    if (typeof options.pickMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Pick message option must be a string.');
+    if (typeof options.winMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Win message option must be a string.');
+    if (typeof options.tieMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Tie message option must be a string.');
+    if (typeof options.timeoutMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Timeout message option must be a string.');
+    if (options.playerOnlyMessage !== false) {
+      if (!options.playerOnlyMessage) options.playerOnlyMessage = 'Only {player} and {opponent} can use these buttons.';
+      if (typeof options.playerOnlyMessage !== 'string') throw new TypeError('INVALID_MESSAGE: playerOnly Message option must be a string.');
+    }
 
 
-        if (!options.emojis) options.emojis = {};
-        if (!options.emojis.rock) options.emojis.rock = '🌑';
-        if (typeof options.emojis.rock !== 'string')  throw new TypeError('INVALID_EMOJI: Rock Emoji must be a string.')
-        if (!options.emojis.paper) options.emojis.paper = '📃';
-        if (typeof options.emojis.paper !== 'string')  throw new TypeError('INVALID_EMOJI: Paper Emoji must be a string.')
-        if (!options.emojis.scissors) options.emojis.scissors = '✂️';
-        if (typeof options.emojis.scissors !== 'string')  throw new TypeError('INVALID_EMOJI: Scissors Emoji must be a string.')
+    super(options);
+    this.options = options;
+    this.message = options.message;
+    this.opponent = options.opponent;
+    this.playerPick = null;
+    this.opponentPick = null;
+  }
 
+
+  async sendMessage(content) {
+    if (this.options.isSlashGame) return await this.message.editReply(content);
+    else return await this.message.channel.send(content);
+  }
+
+  async startGame() {
+    if (this.options.isSlashGame) {
+      if (!this.message.deferred) await this.message.deferReply().catch(e => {});
+      this.message.author = this.message.user;
+    }
+
+    const approve = await this.approve();
+    if (approve) this.RPSGame(approve);
+  }
+
+
+  async RPSGame(msg) {
+
+    const emojis = this.options.emojis;
+    const labels = this.options.buttons;
+    const choice = { r: emojis.rock, p: emojis.paper, s: emojis.scissors };
+
+    const embed = new MessageEmbed()
+    .setColor(this.options.embed.color)
+    .setTitle(this.options.embed.title)
+    .setDescription(this.options.embed.description)
+    .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
+
+    const r = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.r).setCustomId('rps_r').setLabel(labels.rock);
+    const p = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.p).setCustomId('rps_p').setLabel(labels.paper);
+    const s = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.s).setCustomId('rps_s').setLabel(labels.scissors);
+    const row = new MessageActionRow().addComponents(r, p, s);
+
+    await msg.edit({ embeds: [embed], components: [row] });
+    const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
+
+
+    collector.on('collect', async btn => {
+      await btn.deferUpdate().catch(e => {});
+      if (btn.user.id !== this.message.author.id && btn.user.id !== this.opponent.id) {
+        if (this.options.playerOnlyMessage) btn.followUp({ content: formatMessage(this.options, 'playerOnlyMessage'), ephemeral: true });
+        return;
+      }
+
+
+      if (btn.user.id === this.message.author.id && !this.playerPick) {
+        this.playerPick = choice[btn.customId.split('_')[1]];
+        btn.followUp({ content: this.options.pickMessage.replace('{emoji}', this.playerPick), ephemeral: true });
+      } 
+      else if (!this.opponentPick) {
+        this.opponentPick = choice[btn.customId.split('_')[1]];
+        btn.followUp({ content: this.options.pickMessage.replace('{emoji}', this.opponentPick), ephemeral: true });
+      }
+      if (this.playerPick && this.opponentPick) return collector.stop();
+    })
+
+    collector.on('end', async (_, reason) => {
+      if (reason === 'idle' || reason === 'user') return this.gameOver(msg, this.getResult());
+    })
+  }
+
+
+  getResult() {
+    if (!this.playerPick && !this.opponentPick) return 'timeout';
+    else if (this.playerPick === this.opponentPick) return 'tie';
+    else return 'win';
+  }
+
+  player1Won() {
+    const { rock: r, paper: p, scissors: s } = this.options.emojis;
+    return ((this.playerPick === s && this.opponentPick === p) || (this.playerPick === r && this.opponentPick === s) || (this.playerPick === p && this.opponentPick === r));
+  }
+
+
+  async gameOver(msg, result) {
+    const RPSGame = { player: this.message.author, opponent: this.opponent, playerPick: this.playerPick, opponentPick: this.opponentPick };
+    if (result === 'win') RPSGame.winner = this.player1Won() ? this.message.author.id : this.opponent.id;
+    this.emit('gameOver', { result, ...RPSGame });
+
+
+    const embed = new MessageEmbed()
+    .setColor(this.options.embed.color)
+    .setTitle(this.options.embed.title)
+    .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
+    .setDescription(formatMessage(this.options, result+'Message', !this.player1Won()))
+    .addFields({ name: this.message.author.username, value: this.playerPick ?? '❔', inline: true })
+    .addFields({ name: 'VS', value: '⚡', inline: true })
+    .addFields({ name: this.opponent.username, value: this.opponentPick ?? '❔', inline: true })
     
-        if (!options.askMessage) options.askMessage = 'Hey {opponent}, {challenger} challenged you for a game of Rock Paper Scissors!';
-        if (typeof options.askMessage !== 'string')  throw new TypeError('ASK_MESSAGE: Ask Messgae must be a string.')
-        if (!options.cancelMessage) options.cancelMessage = 'Looks like they refused to have a game of Rock Paper Scissors. \:(';
-        if (typeof options.cancelMessage !== 'string')  throw new TypeError('CANCEL_MESSAGE: Cancel Message must be a string.')
-        if (!options.timeEndMessage) options.timeEndMessage = 'Since the opponent didnt answer, i dropped the game!';
-        if (typeof options.timeEndMessage !== 'string')  throw new TypeError('TIME_END_MESSAGE: Time End Message must be a string.')
-        
-        
-        if (!options.othersMessage) options.othersMessage = 'You are not allowed to use buttons for this message!';
-        if (typeof options.othersMessage !== 'string') throw new TypeError('INVALID_OTHERS_MESSAGE: Others Message must be a string.')
-        if (!options.chooseMessage) options.chooseMessage = 'You choose {emoji}!';
-        if (typeof options.chooseMessage !== 'string') throw new TypeError('INVALID_CHOOSE_MESSAGE: Choose Message must be a string.')
-        if (!options.noChangeMessage) options.noChangeMessage = 'You cannot change your selection!';
-        if (typeof options.noChangeMessage !== 'string') throw new TypeError('INVALID_NOCHANGE_MESSAGE: noChange Message must be a string.')
-        
-
-        if (!options.gameEndMessage) options.gameEndMessage = 'The game went unfinished :(';
-        if (typeof options.gameEndMessage !== 'string')  throw new TypeError('GAME_END_MESSAGE: Game End Message must be a string.')
-        if (!options.winMessage) options.winMessage = '{winner} won the game!';
-        if (typeof options.winMessage !== 'string')  throw new TypeError('WIN_MESSAGE: Win Message must be a string.')
-        if (!options.drawMessage) options.drawMessage = 'It was a draw!';
-        if (typeof options.drawMessage !== 'string')  throw new TypeError('DRAW_MESSAGE: Draw Message must be a string.')
-
-
-        this.inGame = false;
-        this.options = options;
-        this.opponent = options.opponent;
-        this.message = options.message;
-    }
-
-
-    sendMessage(content) {
-        if (this.options.slash_command) return this.message.editReply(content)
-        else return this.message.channel.send(content)
-    }
-
-
-    async startGame() {
-        if (this.options.slash_command) {
-            if (!this.message.deferred) await this.message.deferReply();
-            this.message.author = this.message.user;
-        }
-
-        if (this.opponent.bot) return this.sendMessage('You can\'t play with bots!')
-        if (this.opponent.id === this.message.author.id) return this.sendMessage('You cannot play with yourself!')
-
-        const check = await verify(this.options)
-
-        if (check) {
-            this.RPSGame();
-        }
-    }
-
-
-    async RPSGame() {
-        this.inGame = true;
-
-        const emojis = this.options.emojis;
-        const choice = { r: emojis.rock, p: emojis.paper, s: emojis.scissors};
-
-        const embed = new MessageEmbed()
-		.setTitle(this.options.embed.title)
- 		.setDescription(this.options.embed.description)
-        .setColor(this.options.embed.color)
-        
-
-        const rock = new MessageButton().setCustomId('r_rps').setStyle('PRIMARY').setLabel(this.options.buttons.rock).setEmoji(emojis.rock)
-        const paper = new MessageButton().setCustomId('p_rps').setStyle('PRIMARY').setLabel(this.options.buttons.paper).setEmoji(emojis.paper)
-        const scissors = new MessageButton().setCustomId('s_rps').setStyle('PRIMARY').setLabel(this.options.buttons.scissors).setEmoji(emojis.scissors)
-        const row = new MessageActionRow().addComponents(rock, paper, scissors)
-
-        const msg = await this.sendMessage({ embeds: [embed], components: [row] })
-
-
-        let challenger_choice;
-        let opponent_choice;
-        const filter = m => m;
-        const collector = msg.createMessageComponentCollector({
-            filter,
-            time: 60000,
-        }) 
-
-
-        collector.on('collect', async btn => {
-            if (btn.user.id !== this.message.author.id && btn.user.id !== this.opponent.id) {
-                const authors = this.message.author.tag + 'and' + this.opponent.tag;
-                return btn.reply({ content: this.options.othersMessage.replace('{author}', authors),  ephemeral: true })
-            }
-
-
-            if (btn.user.id == this.message.author.id) {
-                if (challenger_choice) {
-                    return btn.reply({ content: this.options.noChangeMessage,  ephemeral: true })
-                }
-                challenger_choice = choice[btn.customId.split('_')[0]];
-
-                btn.reply({ content: this.options.chooseMessage.replace('{emoji}', challenger_choice),  ephemeral: true })
-
-                if (challenger_choice && opponent_choice) {
-                    collector.stop()
-                    this.getResult(msg, challenger_choice, opponent_choice)
-                }
-            }
-            else if (btn.user.id == this.opponent.id) {
-                if (opponent_choice) {
-                    return btn.reply({ content: this.options.noChangeMessage,  ephemeral: true })
-                }
-                opponent_choice = choice[btn.customId.split('_')[0]];
-
-                btn.reply({ content: this.options.chooseMessage.replace('{emoji}', opponent_choice),  ephemeral: true })
-
-                if (challenger_choice && opponent_choice) {
-                    collector.stop()
-                    this.getResult(msg, challenger_choice, opponent_choice)
-                }
-            }
-        })
-
-        collector.on('end', async(c, r) => {
-            if (r === 'time' && this.inGame == true) {
-                const endEmbed = new MessageEmbed()
-                .setTitle(this.options.embed.title)
-                .setColor(this.options.embed.color)
-                .setDescription(this.options.gameEndMessage)
-                .setTimestamp()
-
-                return msg.edit({ embeds: [endEmbed], components: disableButtons(msg.components) })
-            }
-        })
-    }
-
-    getResult(msg, challenger, opponent) {
-        let result;
-        const { rock, paper, scissors } = this.options.emojis;
-
-        if (challenger === opponent) {
-            result = this.options.drawMessage;
-        } else if (
-            (opponent === scissors && challenger === paper) || 
-            (opponent === rock && challenger === scissors) || 
-            (opponent === paper && challenger === rock)
-        ) {
-            result = this.options.winMessage.replace('{winner}', this.opponent.toString())
-        } else {
-            result = this.options.winMessage.replace('{winner}', this.message.author.toString())
-        }
-
-        const finalEmbed = new MessageEmbed()
-        .setTitle(this.options.embed.title)
-        .setColor(this.options.embed.color)
-        .setDescription(result)
-        .addField(this.message.author.username, challenger, true)
-        .addField(this.opponent.username, opponent, true)
-        .setTimestamp()
-
-
-        return msg.edit({ embeds: [finalEmbed], components: disableButtons(msg.components) })
-    }
+    return msg.edit({ embeds: [embed], components: [] });
+  }
 }

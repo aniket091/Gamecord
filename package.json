@@ -1,30 +1,28 @@
 {
   "name": "discord-gamecord",
-  "version": "2.0.0",
-  "description": "Discord Gamecord is a powerful module that allows you to play games within Discord!",
+  "version": "3.0.0",
+  "description": "Discord Gamecord is a powerful npm package with a collection of minigames for your discord bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd test && node ."
   },
   "author": "Aniket#0729",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "dependencies": {
-    "discord.js": "^13.1.0",
-    "html-entities": "^2.3.2",
-    "node-fetch": "^2.6.1"
+    "discord.js": "^13.12.0",
+    "html-entities": "^2.3.3",
+    "node-fetch": "^2.6.7"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/aniket091/Gamecord.git"
   },
-  "homepage": "https://github.com/aniket091/Gamecord#readme",
+  "homepage": "https://discord-gamecord.js.org/",
   "keywords": [
-    "gamecord",
+    "discord-gamecord",
     "discord-games",
-    "minigames",
-    "discord",
     "discord.js",
-    "discord-gamecord"
+    "minigames"
   ],
   "bugs": {
     "url": "https://github.com/aniket091/Gamecord/issues"

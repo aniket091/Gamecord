@@ -1,0 +1,11 @@
+{
+  "nature": ["waterfall", "island", "grass", "lake", "ocean", "volcano", "flower", "leaf", "desert", "shrubs", "flood", "hill", "forest", "rain", "tree"],
+  "color": ["blue", "green", "red", "yellow", "pink", "cyan", "gray", "purple", "orange", "voilet", "silver", "brown", "white", "magenta", "bronze"],
+  "sport": ["hockey", "cricket", "football", "karate", "boxing", "cycling", "swimming", "wrestling", "basketball", "skating", "racing", "golf", "volleyball"],
+  "camp": ["campfire", "fishing", "outdoors", "caravan", "tent", "barbeque", "sticks", "flashlight", "backpack", "marshmellow", "map", "matches", "rope", "lantern", "binoculars"],
+  "fruit": ["lemon", "cherry", "pineapple", "peach", "apricot", "grape", "apple", "mango", "melon", "kiwi", "banana", "pear", "strawberry", "tomato", "coconut"],
+  "discord": ["nitro", "hypesquad", "server", "stickers", "clyde", "emoji", "banner", "partner", "boost", "roles", "bots", "voicecall", "brilliance", "balance", "tableflip"],
+  "winter": ["blankets", "coat", "arctic", "gloves", "heater", "hail", "hibernate", "ice", "jacket", "skates", "sled", "snowball", "socks", "sweater", "wool", "furnace", "frostbite"],
+  "pokemon": ["geodude", "doduo", "charmander", "beedril", "victreebel", "machoke", "raichu", "caterpie", "cubone", "mankey", "pikachu", "squirtle", "tauros", "pikachu", "bulbasaur"],
+  "wordle": ["adore", "apple", "areas", "chair", "clear", "cores", "duels", "foamy", "ghoul", "guilt", "input", "intro", "laugh", "metro", "prone", "ruled", "seems", "shoes", "slime", "stain", "storm", "swipe", "topic", "tread", "under"]
+}

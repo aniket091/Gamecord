@@ -1,10 +1,8 @@
-# GAMECORD
+# **GAMECORD**
 
 <p align="center">
-  <img src="https://cdn.discordapp.com/attachments/818900078077018162/893566634743173170/banner.png" alt="gamecord" />
+  <img src="https://cdn.discordapp.com/attachments/818900078077018162/1042159279597166682/banner.png" alt="gamecord" />
 </p>
-
-</br>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/discord-gamecord">
@@ -16,85 +14,60 @@
   </a>
 </p>
 
-> **Discord Gamecord is a powerful module that allows you to play games within Discord :)**
+> **Discord Gamecord is a powerful npm package with a collection of minigames for your discord bot :)**
+
 
 ## **⚙️ Installation** 
 ```
-npm i discord-gamecord
+npm i discord-gamecord@v3-lts
 ```
 
 
 ## **✨ Features**
 
-- Super simple and easy to use.
+- Easy to use.
 - Beginner friendly.
-- Easy to Implement.
-- Supports Slash Commands.
+- Slash Commands Games.
+- Supports Discord.js v13 & v14.
+
 
 ## **📚 Usage**
 ```js
-const { Snake } = require('discord-gamecord')
-
-new Snake({
-  message: message,
-  slash_command: false,
-  embed: {
-    title: 'Snake Game',
-    color: '#5865F2',
-    overTitle: 'Game Over',
-  },
-  snake: { head: '🟢', body: '🟩', tail: '🟢' },
-  emojis: {
-    board: '⬛', 
-    food: '🍎',
-    up: '⬆️', 
-    right: '➡️',
-    down: '⬇️',
-    left: '⬅️',
-  },
-}).startGame()
-```
-
-
-## **✏️ Example**
-### **Looking for Examples? click here:** [**Examples!**](https://discord-gamecord.js.org/docs/gamecord/master/general/welcome)
-```js
-const Discord = require('discord.js');
-const client = new Discord.Client();
 const { Snake } = require('discord-gamecord');
 
-
-client.on('messageCreate', async (message) => {
-  if(message.content === '!snake') {
-    new Snake({
-      message: message,
-      slash_command: false,
-      embed: {
-        title: 'Snake Game',
-        color: '#5865F2',
-        OverTitle: 'Game Over',
-      },
-      snake: { head: '🟢', body: '🟩', tail: '🟢' },
-      emojis: {
-        board: '⬛',
-        food: '🍎',
-        up: '⬆️', 
-        down: '⬇️',
-        right: '➡️',
-        left: '⬅️',
-      }
-    }).startGame();
-  }
+const Game = new Snake({
+  message: message,
+  isSlashGame: false,
+  embed: {
+    title: 'Snake Game',
+    overTitle: 'Game Over',
+    color: '#5865F2'
+  },
+  emojis: {
+    board: '⬛',
+    food: '🍎',
+    up: '⬆️', 
+    down: '⬇️',
+    left: '⬅️',
+    right: '➡️',
+  },
+  stopButton: 'Stop',
+  timeoutTime: 60000,
+  snake: { head: '🟢', body: '🟩', tail: '🟢', over: '💀' },
+  foods: ['🍎', '🍇', '🍊', '🫐', '🥕', '🥝', '🌽'],
+  playerOnlyMessage: 'Only {player} can use these buttons.'
 });
 
-client.login('YOUR_COOL_DISCORD_BOT_TOKEN');
+Game.startGame();
+Game.on('gameOver', result => {
+  console.log(result);  // =>  { result... }
+});
 ```
 
-## **Docs**
-For more information about the Games and how to use them, refer the [Docs!](https://discord-gamecord.js.org/)
 
 ## **📷 Preview**
-<img src="https://cdn.discordapp.com/attachments/818900078077018162/894099405051932712/example.png">
+<img src="https://cdn.discordapp.com/attachments/818900078077018162/1042159356780757072/Preview.png">
 
 ## **❔ Support**
 <a href="https://discord.gg/invite/GaczkwfgV9"><img src="https://invidget.switchblade.xyz/GaczkwfgV9" alt="Discord"></a>
+
