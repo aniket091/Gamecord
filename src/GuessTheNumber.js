@@ -9,7 +9,7 @@ class GuessTheNumber extends EventEmitter {
 
         this.moreThanMessage = gtnOptions?.moreThanMessage ?? "The number you guessed is greater than the number we selected"
         this.lessThanMessage = gtnOptions?.lessThanMessage ?? "The number you guessed is less than the number we selected"
-        this.winMessage = gtnOptions?.winMessage ?? "Congratulations {player}! You guessed the corrent number"
+        this.winMessage = gtnOptions?.winMessage ?? "Congratulations {player}! You guessed the correct number"
         this.author = gtnOptions?.isSlashCommand ? gtnOptions.message.user : gtnOptions.message.author
         this.range = {
             lowest: gtnOptions?.range?.lowest ?? 1,

@@ -13,7 +13,7 @@ client.on('messageCreate', async (message) => {
       message: message,
       moreThanMessage: "The number you guessed is greater than the number we selected",
       lessThanMessage: "The number you guessed is less than the number we selected",
-      winMessage: "Congratulations {player}! You guessed the corrent number",
+      winMessage: "Congratulations {player}! You guessed the correct number",
       isSlashCommand: false, // set this to true if you are using slash commands
       range: {
         lowest: 1,
