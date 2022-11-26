@@ -112,7 +112,7 @@ module.exports = class TicTacToe extends approve {
       this.gameBoard[btn.customId.split('_')[1]] = (this.player1Turn ? 1 : 2);
       if (this.hasWonGame(1) || this.hasWonGame(2) || !this.gameBoard.includes(0)) collector.stop();
       if (this.hasWonGame(1) || this.hasWonGame(2)) return this.gameOver(msg, 'win');
-      if (!this.gameBoard.includes(0)) return this.gameBoard(msg, 'tie');
+      if (!this.gameBoard.includes(0)) return this.gameOver(msg, 'tie');
       this.player1Turn = !this.player1Turn;  
 
 
