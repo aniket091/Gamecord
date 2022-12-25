@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { formatMessage, ButtonBuilder } = require('../utils/utils');
 const fetch = require('node-fetch');
 const events = require('events');
 
@@ -55,9 +55,10 @@ module.exports = class WouldYouRather extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     this.data = await this.getWyrQuestion();
@@ -72,7 +73,6 @@ module.exports = class WouldYouRather extends events {
     .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
 
 
-    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
     const btn1 = new ButtonBuilder().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option1).setCustomId('wyr_1').setEmoji('1️⃣');
     const btn2 = new ButtonBuilder().setStyle(this.options.buttonStyle).setLabel(this.options.buttons.option2).setCustomId('wyr_2').setEmoji('2️⃣');
     const row = new ActionRowBuilder().addComponents(btn1, btn2);

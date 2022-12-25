@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({ intents: [ 1, 512, 4096, 32768 ] });
 const { Snake } = require('../index');
 
 

@@ -17,6 +17,7 @@ const Game = new Connect4({
     player1: '🔴',
     player2: '🟡'
   },
+  mentionUser: true,
   timeoutTime: 60000,
   buttonStyle: 'PRIMARY',
   turnMessage: '{emoji} | Its turn of player **{player}**.',

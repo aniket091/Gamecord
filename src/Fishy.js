@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const events = require('events');
 
 
@@ -16,7 +16,7 @@ module.exports = class FishyGame extends events {
     if (!options.embed.color) options.embed.color = '#5865F2';
 
     if (!options.player) options.player = {};
-    if (!options.player.id) options.player.id = options.message.author.id;
+    if (!options.player.id) options.player.id = options.message[options.isSlashGame ? 'user' : 'author'].id;
     if (!options.player.balance && options.player.balance !== 0) options.player.balance = 50;
     if (!options.player.fishes) options.player.fishes = {};
 
@@ -49,7 +49,7 @@ module.exports = class FishyGame extends events {
     if (typeof options.invalidTypeMessage !== 'string') throw new TypeError('INVALID_MESSAGE: InvalidType message option must be a string.');
     if (typeof options.invalidAmountMessage !== 'string') throw new TypeError('INVALID_MESSAGE: InvalidAmount message option must be a string.');
     if (typeof options.noItemMessage !== 'string') throw new TypeError('INVALID_MESSAGE: noItem message option must be a string.');
-
+    if (!options.message.deferred) options.message.deferReply().catch(e => {});
 
     super();
     this.options = options;
@@ -59,8 +59,11 @@ module.exports = class FishyGame extends events {
   }
 
 
-  async sendMessage(content) {
-    if (this.options.isSlashGame) return await this.message.editReply(content);
+  async sendMessage(content) {  
+    if (this.options.isSlashGame) {
+      if (!this.message.deferred) return await this.message.reply(content);
+      else return await this.message.editReply(content);
+    }
     else return await this.message.channel.send(content);
   }
 
@@ -107,7 +110,7 @@ module.exports = class FishyGame extends events {
   async fishyInventory() {
     const fishes = (['Common', 'Uncommon', 'Rare'].map(e => `**\u2000${this.fishes[e.toLowerCase()].emoji} ${e} Fish** — ${this.player.fishes[e.toLowerCase()] || 0}`).join('\n\n'));
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })

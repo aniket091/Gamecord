@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { getAlphaEmoji, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { getAlphaEmoji, formatMessage, ButtonBuilder } = require('../utils/utils');
 const words = require('../utils/words.json');
 const events = require('events');
 
@@ -80,9 +80,10 @@ module.exports = class Hangman extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     if (!this.word) {
@@ -167,7 +168,6 @@ module.exports = class Hangman extends events {
     return this.word.toUpperCase().split('').map(l => this.guessed.includes(l) ? getAlphaEmoji(l) : ((l === ' ') ? '⬜' : '🔵')).join(' ');
   }
 
-
   getComponents(page) {
     const components = [];
     if (page == 0 || page == 1) this.buttonPage = page;
@@ -179,19 +179,18 @@ module.exports = class Hangman extends events {
       for (let x = 0; x < 4; x++) {
         
         const letter = letters[y * 4 + x];
-        const btn = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel(letter).setCustomId(`hangman_${letter}`)
+        const btn = new ButtonBuilder().setStyle('PRIMARY').setLabel(letter).setCustomId(`hangman_${letter}`)
         .setDisabled(this.guessed.includes(letter));
         row.addComponents(btn);
       }
       components.push(row);
     }
 
-
     const row4 = new ActionRowBuilder();
-    const stop = new ButtonBuilder().setStyle(buttonStyle('DANGER')).setLabel('Stop').setCustomId('hangman_stop');
-    const pageBtn = new ButtonBuilder().setStyle(buttonStyle('SUCCESS')).setEmoji(this.buttonPage ? '⬅️' : '➡️').setCustomId(pageID);
-    const letterY = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Y').setCustomId('hangman_Y');
-    const letterZ = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Z').setCustomId('hangman_Z');
+    const stop = new ButtonBuilder().setStyle('DANGER').setLabel('Stop').setCustomId('hangman_stop');
+    const pageBtn = new ButtonBuilder().setStyle('SUCCESS').setEmoji(this.buttonPage ? '⬅️' : '➡️').setCustomId(pageID);
+    const letterY = new ButtonBuilder().setStyle('PRIMARY').setLabel('Y').setCustomId('hangman_Y');
+    const letterZ = new ButtonBuilder().setStyle('PRIMARY').setLabel('Z').setCustomId('hangman_Z');
 
     if (this.guessed.includes('Y')) letterY.setDisabled(true);
     if (this.guessed.includes('Z')) letterZ.setDisabled(true);

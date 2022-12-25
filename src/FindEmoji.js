@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, shuffleArray, formatMessage, ButtonBuilder } = require('../utils/utils');
 const events = require('events');
 
 
@@ -62,9 +62,10 @@ module.exports = class FindEmoji extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     this.emojis = shuffleArray(this.emojis).slice(0, 8);
@@ -122,14 +123,13 @@ module.exports = class FindEmoji extends events {
 
   getComponents(showEmoji) {
     const components = [];
-
     for (let x = 0; x < 2; x++) {
       const row = new ActionRowBuilder();
       for (let y = 0; y < 4; y++) {
         const buttonEmoji = this.emojis[x * 4 + y];
 
         const btn = new ButtonBuilder().setCustomId('findEmoji_' + (x*4 + y))
-        .setStyle(buttonStyle(buttonEmoji === this.selected ? (this.selected === this.emoji ? 'SUCCESS' : 'DANGER') : this.options.buttonStyle));
+        .setStyle(buttonEmoji === this.selected ? (this.selected === this.emoji ? 'SUCCESS' : 'DANGER') : this.options.buttonStyle);
         if (showEmoji) btn.setEmoji(buttonEmoji);
         else btn.setLabel('\u200b');
         row.addComponents(btn);

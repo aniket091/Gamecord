@@ -51,9 +51,10 @@ module.exports = class Wordle extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     if (!this.word) this.word = words['wordle'][Math.floor(Math.random() * words['wordle'].length)];
 

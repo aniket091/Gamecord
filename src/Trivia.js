@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { decode, formatMessage, shuffleArray, disableButtons, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { decode, formatMessage, shuffleArray, disableButtons, ButtonBuilder } = require('../utils/utils');
 const difficulties = ['easy', 'medium', 'hard'];
 const fetch = require('node-fetch');
 const events = require('events');
@@ -66,9 +66,10 @@ module.exports = class Trivia extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     await this.getTriviaQuestion();
@@ -95,7 +96,7 @@ module.exports = class Trivia extends events {
 
       collector.stop();
       this.selected = btn.customId.split('_')[1];
-      return this.gameOver(msg, this.selected === this.trivia.answer);    
+      return this.gameOver(msg, this.trivia.options[this.selected-1] === this.trivia.answer);    
     })
 
     collector.on('end', async (_, reason) => {
@@ -125,7 +126,7 @@ module.exports = class Trivia extends events {
 
     if (this.options.mode === 'multiple') {
       if (gameOver && !this.selected) this.selected = (this.trivia.options.indexOf(this.trivia.answer) + 1);
-      const style = buttonStyle(this.selected ? 'SECONDARY' : this.options.buttonStyle);
+      const style = this.selected ? 'SECONDARY' : this.options.buttonStyle;
       const btn1 = new ButtonBuilder().setStyle(style).setCustomId('trivia_1').setLabel(this.trivia.options[0]);
       const btn2 = new ButtonBuilder().setStyle(style).setCustomId('trivia_2').setLabel(this.trivia.options[1]);
       const btn3 = new ButtonBuilder().setStyle(style).setCustomId('trivia_3').setLabel(this.trivia.options[2]);
@@ -133,19 +134,19 @@ module.exports = class Trivia extends events {
       row.addComponents(btn1, btn2, btn3, btn4);
 
       if (this.selected) {
-        if (this.trivia.answer !== this.trivia.options[this.selected-1]) row.components[this.selected-1].setStyle(buttonStyle(this.options.falseButtonStyle));
-        else row.components[this.selected-1].setStyle(buttonStyle(this.options.trueButtonStyle));
+        if (this.trivia.answer !== this.trivia.options[this.selected-1]) row.components[this.selected-1].setStyle(this.options.falseButtonStyle);
+        else row.components[this.selected-1].setStyle(this.options.trueButtonStyle);
       }
     } 
     else {
       if (gameOver && !this.selected) this.selected = this.trivia.answer;
-      const btn1 = new ButtonBuilder().setStyle(buttonStyle(this.selected ? 'SECONDARY' : this.options.trueButtonStyle)).setCustomId('trivia_True').setLabel('True');
-      const btn2 = new ButtonBuilder().setStyle(buttonStyle(this.selected ? 'SECONDARY' : this.options.falseButtonStyle)).setCustomId('trivia_False').setLabel('False');
+      const btn1 = new ButtonBuilder().setStyle(this.selected ? 'SECONDARY' : this.options.trueButtonStyle).setCustomId('trivia_True').setLabel('True');
+      const btn2 = new ButtonBuilder().setStyle(this.selected ? 'SECONDARY' : this.options.falseButtonStyle).setCustomId('trivia_False').setLabel('False');
       row.addComponents(btn1, btn2);
 
       if (this.selected) {
-        if (this.selected === 'True') btn1.setStyle(buttonStyle((this.selected === this.trivia.answer) ? 'SUCCESS' : 'DANGER'));
-        else btn2.setStyle(buttonStyle((this.selected === this.trivia.answer) ? 'SUCCESS' : 'DANGER'));
+        if (this.selected === 'True') btn1.setStyle((this.selected === this.trivia.answer) ? 'SUCCESS' : 'DANGER');
+        else btn2.setStyle((this.selected === this.trivia.answer) ? 'SUCCESS' : 'DANGER');
       }
     }
 

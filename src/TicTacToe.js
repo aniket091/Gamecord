@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, ButtonBuilder } = require('../utils/utils');
 const approve = require('../utils/approve');
 
 
@@ -74,9 +74,10 @@ module.exports = class TicTacToe extends approve {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     const approve = await this.approve();
@@ -92,7 +93,7 @@ module.exports = class TicTacToe extends approve {
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
     .addFields({ name: this.options.embed.statusTitle, value: this.getTurnMessage() }) 
 
-    await msg.edit({ embeds: [embed], components: this.getComponents() });
+    await msg.edit({ content: null, embeds: [embed], components: this.getComponents() });
     this.handleButtons(msg);
   }
 
@@ -112,7 +113,7 @@ module.exports = class TicTacToe extends approve {
       this.gameBoard[btn.customId.split('_')[1]] = (this.player1Turn ? 1 : 2);
       if (this.hasWonGame(1) || this.hasWonGame(2) || !this.gameBoard.includes(0)) collector.stop();
       if (this.hasWonGame(1) || this.hasWonGame(2)) return this.gameOver(msg, 'win');
-      if (!this.gameBoard.includes(0)) return this.gameBoard(msg, 'tie');
+      if (!this.gameBoard.includes(0)) return this.gameOver(msg, 'tie');
       this.player1Turn = !this.player1Turn;  
 
 
@@ -177,7 +178,7 @@ module.exports = class TicTacToe extends approve {
   }
 
   getTurnMessage(msg) {
-    return formatMessage(this.options, (msg || 'turnMessage'), !this.player1Turn).replace('{emoji}', this.getPlayerEmoji());
+    return this.formatTurnMessage(this.options, (msg ?? 'turnMessage')).replace('{emoji}', this.getPlayerEmoji());
   }
 
 
@@ -196,7 +197,7 @@ module.exports = class TicTacToe extends approve {
       for (let y = 0; y < 3; y++) {
 
         const button = this.getButton(this.gameBoard[y * 3 + x]);
-        const btn = new ButtonBuilder().setEmoji(button.emoji).setStyle(buttonStyle(button.style)).setCustomId('TicTacToe_' + (y * 3 + x));
+        const btn = new ButtonBuilder().setEmoji(button.emoji).setStyle(button.style).setCustomId('TicTacToe_' + (y * 3 + x));
         if (this.gameBoard[y * 3 + x] !== 0) btn.setDisabled(true);
         row.addComponents(btn);
       }
