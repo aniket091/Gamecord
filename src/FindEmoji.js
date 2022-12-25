@@ -62,9 +62,10 @@ module.exports = class FindEmoji extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     this.emojis = shuffleArray(this.emojis).slice(0, 8);
@@ -122,7 +123,6 @@ module.exports = class FindEmoji extends events {
 
   getComponents(showEmoji) {
     const components = [];
-
     for (let x = 0; x < 2; x++) {
       const row = new MessageActionRow();
       for (let y = 0; y < 4; y++) {

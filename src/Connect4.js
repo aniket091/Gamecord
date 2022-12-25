@@ -8,9 +8,9 @@ module.exports = class Connect4 extends approve {
 
     if (!options.isSlashGame) options.isSlashGame = false;
     if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if (!options.opponent) throw new TypeError('NO_OPPONENT: No opponent option was provided.');
     if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
     if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
-    if (!options.opponent) throw new TypeError('NO_OPPONENT: No opponent option was provided.');
     if (typeof options.opponent !== 'object') throw new TypeError('INVALID_OPPONENT: opponent option must be an object.');
 
 
@@ -87,9 +87,10 @@ module.exports = class Connect4 extends approve {
   }
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     const approve = await this.approve();
@@ -116,7 +117,7 @@ module.exports = class Connect4 extends approve {
     const row1 = new MessageActionRow().addComponents(btn1, btn2, btn3, btn4);
     const row2 = new MessageActionRow().addComponents(btn5, btn6, btn7);
 
-    await msg.edit({ embeds: [embed], components: [row1, row2] });
+    msg = await msg.edit({ content: null, embeds: [embed], components: [row1, row2] });
     return this.handleButtons(msg);
   }
 
@@ -196,7 +197,7 @@ module.exports = class Connect4 extends approve {
   }
 
   getTurnMessage(msg) {
-    return formatMessage(this.options, (msg || 'turnMessage'), !this.player1Turn).replace('{emoji}', this.getPlayerEmoji());
+    return this.formatTurnMessage(this.options, (msg ?? 'turnMessage')).replace('{emoji}', this.getPlayerEmoji());
   }
 
 

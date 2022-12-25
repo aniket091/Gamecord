@@ -18,6 +18,7 @@ const Game = new TicTacToe({
     oButton: '🔵',
     blankButton: '➖'
   },
+  mentionUser: true,
   timeoutTime: 60000,
   xButtonStyle: 'DANGER',
   oButtonStyle: 'PRIMARY',

@@ -5,7 +5,6 @@ module.exports = {
         components[x].components[y].disabled = true;
       }
     }
-
     return components;
   },
 
@@ -14,13 +13,12 @@ module.exports = {
     return numEmoji[number];
   },
 
-  formatMessage(options, contentMsg, isOpp) {
+  formatMessage(options, contentMsg) {
     const { message, opponent } = options;
     let content = options[contentMsg];
 
-    if (isOpp) content = content.replace('{player.tag}', opponent.tag).replace('{player.username}', opponent.username).replace('{player}', `<@!${opponent.id}>`);
-    content = content.replace('{player.tag}', message.author.tag).replace('{player.username}', message.author.username).replace('{player}', `<@!${options.message.author.id}>`);
-    content = content.replace('{opponent.tag}', opponent?.tag).replace('{opponent.username}', opponent?.username).replace('{player}', `<@!${opponent?.id}>`);
+    content = content.replace('{player.tag}', message.author.tag).replace('{player.username}', message.author.username).replace('{player}', `<@!${message.author.id}>`);
+    content = content.replace('{opponent.tag}', opponent?.tag).replace('{opponent.username}', opponent?.username).replace('{opponent}', `<@!${opponent?.id}>`);
     return content;
   },
 

@@ -8,9 +8,9 @@ module.exports = class RPSGame extends approve {
 
     if (!options.isSlashGame) options.isSlashGame = false;
     if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if (!options.opponent) throw new TypeError('NO_OPPONENT: No opponent option was provided.');
     if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
     if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
-    if (!options.opponent) throw new TypeError('NO_OPPONENT: No opponent option was provided.');
     if (typeof options.opponent !== 'object') throw new TypeError('INVALID_OPPONENT: opponent option must be an object.');
 
 
@@ -78,9 +78,10 @@ module.exports = class RPSGame extends approve {
   }
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     const approve = await this.approve();
@@ -105,7 +106,7 @@ module.exports = class RPSGame extends approve {
     const s = new MessageButton().setStyle(this.options.buttonStyle).setEmoji(choice.s).setCustomId('rps_s').setLabel(labels.scissors);
     const row = new MessageActionRow().addComponents(r, p, s);
 
-    await msg.edit({ embeds: [embed], components: [row] });
+    await msg.edit({ content: null, embeds: [embed], components: [row] });
     const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
 
 
@@ -150,13 +151,14 @@ module.exports = class RPSGame extends approve {
     const RPSGame = { player: this.message.author, opponent: this.opponent, playerPick: this.playerPick, opponentPick: this.opponentPick };
     if (result === 'win') RPSGame.winner = this.player1Won() ? this.message.author.id : this.opponent.id;
     this.emit('gameOver', { result, ...RPSGame });
+    this.player1Turn = this.player1Won();
 
 
     const embed = new MessageEmbed()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setFooter({ text: this.message.author.tag + ' vs ' + this.opponent.tag })
-    .setDescription(formatMessage(this.options, result+'Message', !this.player1Won()))
+    .setDescription(this.formatTurnMessage(this.options, result+'Message'))
     .addFields({ name: this.message.author.username, value: this.playerPick ?? '❔', inline: true })
     .addFields({ name: 'VS', value: '⚡', inline: true })
     .addFields({ name: this.opponent.username, value: this.opponentPick ?? '❔', inline: true })

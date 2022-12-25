@@ -22,6 +22,7 @@ const Game = new RockPaperScissors({
     paper: '📰',
     scissors: '✂️'
   },
+  mentionUser: true,
   timeoutTime: 60000,
   buttonStyle: 'PRIMARY',
   pickMessage: 'You choose {emoji}.',

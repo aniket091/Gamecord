@@ -66,9 +66,10 @@ module.exports = class Trivia extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
 
     await this.getTriviaQuestion();
@@ -95,7 +96,7 @@ module.exports = class Trivia extends events {
 
       collector.stop();
       this.selected = btn.customId.split('_')[1];
-      return this.gameOver(msg, this.selected === this.trivia.answer);    
+      return this.gameOver(msg, this.trivia.options[this.selected-1] === this.trivia.answer);    
     })
 
     collector.on('end', async (_, reason) => {

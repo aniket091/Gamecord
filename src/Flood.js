@@ -74,9 +74,10 @@ module.exports = class Flood extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     this.maxTurns = Math.floor((25 * (this.length * 2)) / 26);
 

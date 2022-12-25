@@ -16,7 +16,7 @@ module.exports = class FishyGame extends events {
     if (!options.embed.color) options.embed.color = '#5865F2';
 
     if (!options.player) options.player = {};
-    if (!options.player.id) options.player.id = options.message.author.id;
+    if (!options.player.id) options.player.id = options.message[options.isSlashGame ? 'user' : 'author'].id;
     if (!options.player.balance && options.player.balance !== 0) options.player.balance = 50;
     if (!options.player.fishes) options.player.fishes = {};
 

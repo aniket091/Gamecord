@@ -17,6 +17,7 @@ module.exports = class Approve extends events {
     if (!options.buttons.reject) options.buttons.reject = 'Reject';
 
     if (!options.reqTimeoutTime) options.reqTimeoutTime = 30000;
+    if (typeof options.mentionUser === 'undefined') options.mentionUser = false;
     if (!options.requestMessage) options.requestMessage = '{player} has invited you for a round of Game.';
     if (!options.rejectMessage) options.rejectMessage = 'The player denied your request for a round of Game.';
     if (!options.reqTimeoutMessage) options.reqTimeoutMessage = 'Dropped the game as the player did not respond.';
@@ -46,7 +47,8 @@ module.exports = class Approve extends events {
       const btn2 = new MessageButton().setLabel(this.options.buttons.reject).setCustomId('approve_reject').setStyle('DANGER');
       const row = new MessageActionRow().addComponents(btn1, btn2);
 
-      const msg = await this.sendMessage({ embeds: [embed], components: [row] });
+      const content = this.options.mentionUser ? '<@!'+this.opponent.id+'>' : null;
+      const msg = await this.sendMessage({ content, embeds: [embed], components: [row] });
       const collector = msg.createMessageComponentCollector({ time: this.options.reqTimeoutTime });
 
 
@@ -69,6 +71,16 @@ module.exports = class Approve extends events {
         return resolve(false);
       })
     })
+  }
+
+  formatTurnMessage(options, contentMsg) {
+    const { message, opponent } = options;
+    let player1 = (!this.player1Turn) ? opponent : message.author;
+    let content = options[contentMsg];
+
+    content = content.replace('{player.tag}', player1.tag).replace('{player.username}', player1.username).replace('{player}', `<@!${player1.id}>`);
+    content = content.replace('{opponent.tag}', opponent.tag).replace('{opponent.username}', opponent.username).replace('{opponent}', `<@!${opponent.id}>`);
+    return content;
   }
 }
 
