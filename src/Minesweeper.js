@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons , getNumEmoji, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons , getNumEmoji, formatMessage, ButtonBuilder } = require('../utils/utils');
 const events = require('events');
 
 
@@ -67,9 +67,10 @@ module.exports = class Minesweeper extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     this.plantMines();
     this.showFirstBlock();
@@ -206,7 +207,7 @@ module.exports = class Minesweeper extends events {
         const displayMine = (block === true && showMines);
 
         const btn = new ButtonBuilder()
-        .setStyle(buttonStyle(displayMine ? (found ? 'SUCCESS' : 'DANGER') : (isNumber || block === 0 ? 'SECONDARY' : 'PRIMARY')))
+        .setStyle(displayMine ? (found ? 'SUCCESS' : 'DANGER') : (isNumber || block === 0 ? 'SECONDARY' : 'PRIMARY'))
         .setCustomId('minesweeper_' + x + '_' + y)
 
         if (displayMine || isNumber) btn.setEmoji(displayMine ? (found ? this.emojis.flag : this.emojis.mine) : isNumber);

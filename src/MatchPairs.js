@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, shuffleArray, formatMessage, buttonStyle, ButtonBuilder } = require('../utils/utils');
 const events = require('events');
 
 
@@ -57,9 +57,10 @@ module.exports = class MatchPairs extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     
     this.emojis = shuffleArray(this.emojis).slice(0, 12);
@@ -96,9 +97,7 @@ module.exports = class MatchPairs extends events {
     for (let y = 0; y < this.length; y++) {
       const row = new ActionRowBuilder();
       for (let x = 0; x < this.length; x++) {
-        const btn = new ButtonBuilder().setStyle(buttonStyle('SECONDARY')).setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
-        btn.removeLabel = function() { this.data.label = null; return this; };
-        btn.removeEmoji = function() { this.data.emoji = null; return this; };
+        const btn = new ButtonBuilder().setStyle('SECONDARY').setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
         row.addComponents(btn);
       }
       components.push(row);
@@ -144,11 +143,11 @@ module.exports = class MatchPairs extends events {
       
       if (!this.selected) {
         this.selected = { x: x, y: y, id: id };
-        emojiBtn.setEmoji(emoji).setStyle(buttonStyle('PRIMARY')).removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle('PRIMARY').removeLabel();
       }
       else if (this.selected.id === id) {
         this.selected = null;
-        emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
+        emojiBtn.removeEmoji().setStyle('SECONDARY').setLabel('\u200b');
       }
       else {
         const selectedEmoji = this.emojis[this.selected.id];
@@ -161,17 +160,17 @@ module.exports = class MatchPairs extends events {
           const pair = this.getPairEmoji(this.emojis[joker.id]).filter(b => b.id !== joker.id)[0];
           const pairBtn = this.components[pair.y].components[pair.x];
 
-          pairBtn.setEmoji(this.emojis[pair.id]).setStyle(buttonStyle('SUCCESS')).setDisabled(true).removeLabel();
+          pairBtn.setEmoji(this.emojis[pair.id]).setStyle('SUCCESS').setDisabled(true).removeLabel();
         }
 
 
-        emojiBtn.setEmoji(emoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
-        selectedBtn.setEmoji(selectedEmoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle(matched ? 'SUCCESS' : 'DANGER').setDisabled(matched).removeLabel();
+        selectedBtn.setEmoji(selectedEmoji).setStyle(matched ? 'SUCCESS' : 'DANGER').setDisabled(matched).removeLabel();
 
         if (!matched) {
           await msg.edit({ components: this.components });
-          emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
-          selectedBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
+          emojiBtn.removeEmoji().setStyle('SECONDARY').setLabel('\u200b');
+          selectedBtn.removeEmoji().setStyle('SECONDARY').setLabel('\u200b');
           return this.selected = null;;
         }
 

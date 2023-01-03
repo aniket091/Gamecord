@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, ButtonBuilder } = require('../utils/utils');
 const events = require('events');
 const HEIGHT = 10;
 const WIDTH = 15;
@@ -132,9 +132,10 @@ module.exports = class SnakeGame extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     
     const emojis = this.options.emojis;
@@ -148,14 +149,14 @@ module.exports = class SnakeGame extends events {
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 
 
-    const up = new ButtonBuilder().setEmoji(emojis.up).setStyle(buttonStyle('PRIMARY')).setCustomId('snake_up');
-    const down = new ButtonBuilder().setEmoji(emojis.down).setStyle(buttonStyle('PRIMARY')).setCustomId('snake_down');
-    const left = new ButtonBuilder().setEmoji(emojis.left).setStyle(buttonStyle('PRIMARY')).setCustomId('snake_left');
-    const right = new ButtonBuilder().setEmoji(emojis.right).setStyle(buttonStyle('PRIMARY')).setCustomId('snake_right');
-    const stop = new ButtonBuilder().setLabel(this.options.stopButton).setStyle(buttonStyle('DANGER')).setCustomId('snake_stop');
+    const up = new ButtonBuilder().setEmoji(emojis.up).setStyle('PRIMARY').setCustomId('snake_up');
+    const down = new ButtonBuilder().setEmoji(emojis.down).setStyle('PRIMARY').setCustomId('snake_down');
+    const left = new ButtonBuilder().setEmoji(emojis.left).setStyle('PRIMARY').setCustomId('snake_left');
+    const right = new ButtonBuilder().setEmoji(emojis.right).setStyle('PRIMARY').setCustomId('snake_right');
+    const stop = new ButtonBuilder().setLabel(this.options.stopButton).setStyle('DANGER').setCustomId('snake_stop');
 
-    const dis1 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis1').setDisabled(true);
-    const dis2 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis2').setDisabled(true);
+    const dis1 = new ButtonBuilder().setLabel('\u200b').setStyle('SECONDARY').setCustomId('dis1').setDisabled(true);
+    const dis2 = new ButtonBuilder().setLabel('\u200b').setStyle('SECONDARY').setCustomId('dis2').setDisabled(true);
     const row1 = new ActionRowBuilder().addComponents(dis1, up, dis2, stop);
     const row2 = new ActionRowBuilder().addComponents(left, down, right);
 

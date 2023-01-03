@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, ButtonBuilder } = require('../utils/utils');
 const squares = ['🟥', '🟦', '🟧', '🟪', '🟩'];
 const events = require('events');
 
@@ -74,9 +74,10 @@ module.exports = class Flood extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     this.maxTurns = Math.floor((25 * (this.length * 2)) / 26);
 
@@ -88,7 +89,7 @@ module.exports = class Flood extends events {
     .addFields({ name: 'Turns', value: `${this.turns}/${this.maxTurns}` })
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+    
     const btn1 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[0]).setCustomId('flood_0');
     const btn2 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[1]).setCustomId('flood_1');
     const btn3 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[2]).setCustomId('flood_2');

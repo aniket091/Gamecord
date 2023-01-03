@@ -8,7 +8,6 @@ module.exports = {
         components[x].components[y].setDisabled(true);
       }
     }
-
     return components;
   },
 
@@ -17,20 +16,12 @@ module.exports = {
     return numEmoji[number];
   },
 
-  buttonStyle(style) {
-    if (style === 'PRIMARY') return 1;
-    else if (style === 'SUCCESS') return 3;
-    else if (style === 'DANGER') return 4;
-    return 2;
-  },
-
-  formatMessage(options, contentMsg, isOpp) {
+  formatMessage(options, contentMsg) {
     const { message, opponent } = options;
     let content = options[contentMsg];
-
-    if (isOpp) content = content.replace('{player.tag}', opponent.tag).replace('{player.username}', opponent.username).replace('{player}', `<@!${opponent.id}>`);
-    content = content.replace('{player.tag}', message.author.tag).replace('{player.username}', message.author.username).replace('{player}', `<@!${options.message.author.id}>`);
-    content = content.replace('{opponent.tag}', opponent?.tag).replace('{opponent.username}', opponent?.username).replace('{player}', `<@!${opponent?.id}>`);
+    
+    content = content.replace('{player.tag}', message.author.tag).replace('{player.username}', message.author.username).replace('{player}', `<@!${message.author.id}>`);
+    content = content.replace('{opponent.tag}', opponent?.tag).replace('{opponent.username}', opponent?.username).replace('{opponent}', `<@!${opponent?.id}>`);
     return content;
   },
 
@@ -72,5 +63,28 @@ module.exports = {
     }
 
     return array;
+  }
+}
+
+
+
+module.exports.ButtonBuilder = class buttonBuilder extends ButtonBuilder {
+  constructor(options) {
+    super(options);
+  }
+
+  setStyle(style) {
+    this.data.style = (style==='PRIMARY') ? 1 : (style==='SUCCESS') ? 3 : (style==='DANGER') ? 4 : 2;
+    return this;
+  }
+
+  removeLabel() {
+    this.data.label = null;
+    return this;
+  }
+
+  removeEmoji() {
+    this.data.emoji = null;
+    return this;
   }
 }

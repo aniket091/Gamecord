@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder } = require('discord.js');
-const { disableButtons, formatMessage, move, oppDirection, buttonStyle } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder, AttachmentBuilder } = require('discord.js');
+const { disableButtons, formatMessage, move, oppDirection, ButtonBuilder } = require('../utils/utils');
 const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 const events = require('events');
 
@@ -71,9 +71,10 @@ module.exports = class TwoZeroFourEight extends events {
 
 
   async startGame() {
-    if (this.options.isSlashGame) {
+    if (this.options.isSlashGame || !this.message.author) {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
+      this.options.isSlashGame = true;
     }
     this.placeRandomTile();
     this.placeRandomTile();
@@ -86,7 +87,7 @@ module.exports = class TwoZeroFourEight extends events {
     .addFields({ name: 'Current Score', value: this.score.toString() })
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
+
     const up = new ButtonBuilder().setEmoji(this.options.emojis.up).setStyle(this.options.buttonStyle).setCustomId('2048_up');
     const down = new ButtonBuilder().setEmoji(this.options.emojis.down).setStyle(this.options.buttonStyle).setCustomId('2048_down');
     const left = new ButtonBuilder().setEmoji(this.options.emojis.left).setStyle(this.options.buttonStyle).setCustomId('2048_left');
