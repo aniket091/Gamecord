@@ -211,7 +211,7 @@ module.exports = class Minesweeper extends events {
         .setCustomId('minesweeper_' + x + '_' + y)
 
         if (displayMine || isNumber) btn.setEmoji(displayMine ? (found ? this.emojis.flag : this.emojis.mine) : isNumber);
-        else btn.setLabel(' ');
+        else btn.setLabel('\u200b');
         row.addComponents(btn);
       }
       components.push(row);

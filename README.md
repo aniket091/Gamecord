@@ -18,8 +18,9 @@
 
 
 ## **⚙️ Installation** 
+**For discord.js v13 use `npm i discord-gamecord@v3-lts`**
 ```
-npm i discord-gamecord
+npm i discord-gamecord@latest
 ```
 
 

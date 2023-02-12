@@ -97,7 +97,7 @@ module.exports = class MatchPairs extends events {
     for (let y = 0; y < this.length; y++) {
       const row = new ActionRowBuilder();
       for (let x = 0; x < this.length; x++) {
-        const btn = new ButtonBuilder().setStyle('SECONDARY').setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
+        const btn = new ButtonBuilder().setStyle('SECONDARY').setLabel('\u200b').setCustomId('matchpairs_' + x + '_' + y);
         row.addComponents(btn);
       }
       components.push(row);

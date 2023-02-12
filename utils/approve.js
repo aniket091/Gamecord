@@ -48,7 +48,7 @@ module.exports = class Approve extends events {
       const row = new ActionRowBuilder().addComponents(btn1, btn2);
 
       const content = this.options.mentionUser ? '<@!'+this.opponent.id+'>' : null;
-      const msg = await this.sendMessage({ content, embeds: [embed], components: [row] });
+      const msg = await this.sendMessage({ content, embeds: [embed], components: [row], allowedMentions: { parse: ['users'] } });
       const collector = msg.createMessageComponentCollector({ time: this.options.reqTimeoutTime });
 
 
