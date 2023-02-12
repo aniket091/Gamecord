@@ -1,38 +1,49 @@
 const Discord = require('discord.js');
-const client = new Discord.Client({ intents: [ 1, 512, 4096, 32768 ] });
-const { Snake } = require('../index');
 
+const client = new Discord.Client({
+  intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.MessageContent]
+});
+const { GuessTheNumber } = require('../index');
 
 client.on('messageCreate', async (message) => {
-  if(message.content === '!snake') {
-    const Game = new Snake({
+  if(message.content === '!gtn') {
+    const gtn = new GuessTheNumber({
       message: message,
-      isSlashGame: false,
+      moreThanMessage: "The number you guessed is greater than the number we selected",
+      lessThanMessage: "The number you guessed is less than the number we selected",
+      winMessage: "Congratulations {player}! You guessed the corrent number",
+      isSlashCommand: false,
+      range: {
+        lowest: 1,
+        highest: 100
+      },
+      idleEmbed: {
+        title: "You are idling",
+        description: "It looks like you are idling. Because of this, I have stopped the game",
+        color: "Red",
+        footer: "©️ Gamecord Development Team"
+      },
       embed: {
-        title: 'Snake Game',
-        overTitle: 'Game Over',
-        color: '#5865F2'
+        title: "Guess the number",
+        description: "Guess the number between 1 and 100!",
+        color: "Green",
+        footer: "©️ Gamecord Development Team"
       },
-      emojis: {
-        board: '⬛',
-        food: '🍎',
-        up: '⬆️', 
-        down: '⬇️',
-        left: '⬅️',
-        right: '➡️',
+      timeout: 60000, // in MS
+      win: {
+        embed: {
+          title: "Congrats!",
+          color: "Yellow"
+        }
       },
-      stopButton: 'Stop',
-      timeoutTime: 60000,
-      snake: { head: '🟢', body: '🟩', tail: '🟢', over: '💀' },
-      foods: ['🍎', '🍇', '🍊', '🫐', '🥕', '🥝', '🌽'],
-      playerOnlyMessage: 'Only {player} can use these buttons.'
-    });
-    
-    Game.startGame();
-    Game.on('gameOver', result => {
-      console.log(result);
-    });
+      updateText: `The number you guessed is **{moreOrLess}** the number we chose. You have \`{tries}\` more tries`,
+      deleteMessages: true
+    })
+    gtn.startGame()
+    gtn.on("Gameover", async (state, reason) => {
+      console.log(state, reason)
+    })
   }
 });
 
-client.login('DISCORD_BOT_TOKEN');
+client.login('SUP3R_S3CR3T_T0K3N');
