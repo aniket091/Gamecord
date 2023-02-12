@@ -1,6 +1,6 @@
 {
   "name": "discord-gamecord",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Discord Gamecord is a powerful npm package with a collection of minigames for your discord bot",
   "main": "index.js",
   "scripts": {

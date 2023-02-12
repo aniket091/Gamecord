@@ -211,7 +211,7 @@ module.exports = class Minesweeper extends events {
         .setStyle(displayMine ? (found ? 'SUCCESS' : 'DANGER') : (isNumber || block === 0 ? 'SECONDARY' : 'PRIMARY'))
         .setCustomId('minesweeper_' + x + '_' + y)
 
-        if (btn.emoji === null) btn.setLabel(' ');
+        if (btn.emoji === null) btn.setLabel('\u200b');
         row.addComponents(btn);
       }
       components.push(row);

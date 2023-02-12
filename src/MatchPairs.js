@@ -97,7 +97,7 @@ module.exports = class MatchPairs extends events {
     for (let y = 0; y < this.length; y++) {
       const row = new MessageActionRow();
       for (let x = 0; x < this.length; x++) {
-        const btn = new MessageButton().setStyle('SECONDARY').setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
+        const btn = new MessageButton().setStyle('SECONDARY').setLabel('\u200b').setCustomId('matchpairs_' + x + '_' + y);
         btn.removeLabel = function() { this.label = null; return this; };
         row.addComponents(btn);
       }
@@ -148,7 +148,7 @@ module.exports = class MatchPairs extends events {
       }
       else if (this.selected.id === id) {
         this.selected = null;
-        emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
+        emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel('\u200b');
       }
       else {
         const selectedEmoji = this.emojis[this.selected.id];
@@ -170,8 +170,8 @@ module.exports = class MatchPairs extends events {
 
         if (!matched) {
           await msg.edit({ components: this.components });
-          emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
-          selectedBtn.setEmoji(null).setStyle('SECONDARY').setLabel(' ');
+          emojiBtn.setEmoji(null).setStyle('SECONDARY').setLabel('\u200b');
+          selectedBtn.setEmoji(null).setStyle('SECONDARY').setLabel('\u200b');
           return this.selected = null;;
         }
 
