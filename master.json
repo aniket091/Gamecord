@@ -2,7 +2,7 @@
   "meta": {
     "generator": "0.10.0",
     "format": 20,
-    "date": 1671978725096
+    "date": 1677000550766
   },
   "custom": {
     "general": {
@@ -28,7 +28,7 @@
         "2048": {
           "name": 2048,
           "type": "md",
-          "content": "# **🔢 2048 Game**\r\n\r\n```js\r\nconst { TwoZeroFourEight } = require('discord-gamecord');\r\n\r\nconst Game = new TwoZeroFourEight({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: '2048',\r\n    color: '#5865F2'\r\n  },\r\n  emojis: {\r\n    up: '⬆️',\r\n    down: '⬇️',\r\n    left: '⬅️',\r\n    right: '➡️',\r\n  },\r\n  timeoutTime: 60000,\r\n  buttonStyle: 'PRIMARY',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```\r\n",
+          "content": "# **🔢 2048 Game**\r\n\r\n```js\r\nconst { TwoZeroFourEight } = require('discord-gamecord');\r\n\r\nconst Game = new TwoZeroFourEight({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: '2048',\r\n    color: '#5865F2'\r\n  },\r\n  emojis: {\r\n    up: '⬆️',\r\n    down: '⬇️',\r\n    left: '⬅️',\r\n    right: '➡️',\r\n  },\r\n  timeoutTime: 60000,\r\n  buttonStyle: 'PRIMARY',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
           "path": "docs/games/2048.md"
         },
         "Connect4": {
@@ -46,7 +46,7 @@
         "FastType": {
           "name": "FastType",
           "type": "md",
-          "content": "# **📝 FastType**\r\n\r\n```js\r\nconst { FastType } = require('discord-gamecord');\r\n\r\nconst Game = new FastType({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Fast Type',\r\n    color: '#5865F2',\r\n    description: 'You have {time} seconds to type the sentence below.'\r\n  },\r\n  timeoutTime: 60000,\r\n  sentence: 'Some really cool sentence to fast type.',\r\n  winMessage: 'You won! You finished the type race in {time} seconds with wpm of {wpm}.',\r\n  loseMessage: 'You lost! You didn\\'t type the correct sentence in time.',\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
+          "content": "# **📝 FastType**\r\n> **MessageContent Intent must be enabled for the Game to work.**\r\n\r\n```js\r\nconst { FastType } = require('discord-gamecord');\r\n\r\nconst Game = new FastType({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Fast Type',\r\n    color: '#5865F2',\r\n    description: 'You have {time} seconds to type the sentence below.'\r\n  },\r\n  timeoutTime: 60000,\r\n  sentence: 'Some really cool sentence to fast type.',\r\n  winMessage: 'You won! You finished the type race in {time} seconds with wpm of {wpm}.',\r\n  loseMessage: 'You lost! You didn\\'t type the correct sentence in time.',\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
           "path": "docs/games/FastType.md"
         },
         "FindEmoji": {
@@ -58,7 +58,7 @@
         "Fishy": {
           "name": "Fishy",
           "type": "md",
-          "content": "# **🐟 Fishy**\r\n\r\n```js\r\nconst { Fishy } = require('discord-gamecord');\r\nlet player = {};\r\n\r\nconst Game = new Fishy({\r\n  message: message,\r\n  isSlashGame: false,\r\n  player: player,\r\n  embed: {\r\n    title: 'Fishy Inventory',\r\n    color: '#5865F2'\r\n  },\r\n  fishes: {\r\n    junk: { emoji: '🔧', price: 5 },\r\n    common: { emoji: '🐟', price: 10 },\r\n    uncommon: { emoji: '🐠', price: 20 },\r\n    rare: { emoji: '🐡', price: 50 }\r\n  },\r\n  fishyRodPrice: 10,\r\n  catchMessage: 'You caught a {fish}. You paid {amount} for the fishing rod.',\r\n  sellMessage: 'You sold {amount}x {emoji} {type} items for a total of {price}.',\r\n  noBalanceMessage: 'You don\\'t have enough balance to rent a fishing rod.',\r\n  invalidTypeMessage: 'Fish type can only be junk, common, uncommon or rare.',\r\n  invalidAmountMessage: 'Amount must be between 0 and fish max amount.',\r\n  noItemMessage: 'You don\\'t have any of this item in your inventory.'\r\n});\r\n\r\n// Catch Fish \r\nGame.catchFish();\r\nGame.on('catchFish', fishy => { player = fishy.player });\r\n\r\n// Sell Fish\r\nGame.sellFish(fishType, amount);\r\nGame.on('sellFish', fishy => { player = fishy.player });\r\n// FishType: junk || common || uncommon || rare\r\n\r\n// PLayer Inventory\r\nGame.fishyInventory();\r\n```\r\n\r\n## **🔖 Player**\r\n```js\r\n{\r\n  id: 'discord user id',\r\n  fishes: { junk: 0, common: 0, uncommon: 0, rare: 0 },\r\n  balance: 50\r\n}\r\n```",
+          "content": "# **🐟 Fishy**\r\n\r\n```js\r\nconst { Fishy } = require('discord-gamecord');\r\nlet player = {};\r\n\r\nconst Game = new Fishy({\r\n  message: message,\r\n  isSlashGame: false,\r\n  player: player,\r\n  embed: {\r\n    title: 'Fishy Inventory',\r\n    color: '#5865F2'\r\n  },\r\n  fishes: {\r\n    junk: { emoji: '🔧', price: 5 },\r\n    common: { emoji: '🐟', price: 10 },\r\n    uncommon: { emoji: '🐠', price: 20 },\r\n    rare: { emoji: '🐡', price: 50 }\r\n  },\r\n  fishyRodPrice: 10,\r\n  catchMessage: 'You caught a {fish}. You paid {amount} for the fishing rod.',\r\n  sellMessage: 'You sold {amount}x {emoji} {type} items for a total of {price}.',\r\n  noBalanceMessage: 'You don\\'t have enough balance to rent a fishing rod.',\r\n  invalidTypeMessage: 'Fish type can only be junk, common, uncommon or rare.',\r\n  invalidAmountMessage: 'Amount must be between 0 and fish max amount.',\r\n  noItemMessage: 'You don\\'t have any of this item in your inventory.'\r\n});\r\n\r\n// Catch Fish \r\nGame.catchFish();\r\nGame.on('catchFish', fishy => { player = fishy.player });\r\n\r\n// Sell Fish\r\nGame.sellFish(fishType, amount);\r\nGame.on('sellFish', fishy => { player = fishy.player });\r\n// FishType: junk || common || uncommon || rare\r\n\r\n// PLayer Inventory\r\nGame.fishyInventory();\r\n```\r\n\r\n## **🔖 Player**\r\n```js\r\n{\r\n  id: 'discord user id',\r\n  fishes: { junk: 0, common: 0, uncommon: 0, rare: 0 },\r\n  balance: 50\r\n}\r\n```\r\n\r\n# **🔖 Using Databases**\r\n**If using database, save the player object returned when from the sellFish & catchFish event to your db.**\r\n**Provide the saved player object from the db as the player option in the Game Options.**\r\n\r\n",
           "path": "docs/games/Fishy.md"
         },
         "Flood": {
@@ -70,7 +70,7 @@
         "GuessThePokemon": {
           "name": "Guess The Pokemon",
           "type": "md",
-          "content": "# **🤔 Guess The Pokemon**\r\n\r\n```js\r\nconst { GuessThePokemon } = require('discord-gamecord');\r\n\r\nconst Game = new GuessThePokemon({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Who\\'s The Pokemon',\r\n    color: '#5865F2'\r\n  },\r\n  timeoutTime: 60000,\r\n  winMessage: 'You guessed it right! It was a {pokemon}.',\r\n  loseMessage: 'Better luck next time! It was a {pokemon}.',\r\n  errMessage: 'Unable to fetch pokemon data! Please try again.',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
+          "content": "# **🤔 Guess The Pokemon**\r\n> **MessageContent Intent must be enabled for the Game to work.**\r\n\r\n```js\r\nconst { GuessThePokemon } = require('discord-gamecord');\r\n\r\nconst Game = new GuessThePokemon({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Who\\'s The Pokemon',\r\n    color: '#5865F2'\r\n  },\r\n  timeoutTime: 60000,\r\n  winMessage: 'You guessed it right! It was a {pokemon}.',\r\n  loseMessage: 'Better luck next time! It was a {pokemon}.',\r\n  errMessage: 'Unable to fetch pokemon data! Please try again.',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
           "path": "docs/games/GuessThePokemon.md"
         },
         "Hangman": {
@@ -124,7 +124,7 @@
         "Wordle": {
           "name": "Wordle",
           "type": "md",
-          "content": "# **🆎 Wordle**\r\n\r\n```js\r\nconst { Wordle } = require('discord-gamecord');\r\n\r\nconst Game = new Wordle({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Wordle',\r\n    color: '#5865F2',\r\n  },\r\n  customWord: null,\r\n  timeoutTime: 60000,\r\n  winMessage: 'You won! The word was **{word}**.',\r\n  loseMessage: 'You lost! The word was **{word}**.',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
+          "content": "# **🆎 Wordle**\r\n> **MessageContent Intent must be enabled for the Game to work.**\r\n\r\n```js\r\nconst { Wordle } = require('discord-gamecord');\r\n\r\nconst Game = new Wordle({\r\n  message: message,\r\n  isSlashGame: false,\r\n  embed: {\r\n    title: 'Wordle',\r\n    color: '#5865F2',\r\n  },\r\n  customWord: null,\r\n  timeoutTime: 60000,\r\n  winMessage: 'You won! The word was **{word}**.',\r\n  loseMessage: 'You lost! The word was **{word}**.',\r\n  playerOnlyMessage: 'Only {player} can use these buttons.'\r\n});\r\n\r\nGame.startGame();\r\nGame.on('gameOver', result => {\r\n  console.log(result);  // =>  { result... }\r\n});\r\n```",
           "path": "docs/games/Wordle.md"
         },
         "WouldYouRather": {
