@@ -23,7 +23,7 @@ export class Wordle<IsSlashGame extends boolean = false> extends EventEmitter {
   word: string | null;
   guessed: string[];
 
-  constructor(options?: WordleConstructorOptions<IsSlashGame>);
+  constructor(options: WordleConstructorOptions<IsSlashGame>);
 
   sendMessage(
     content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions

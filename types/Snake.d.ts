@@ -43,7 +43,7 @@ export class Snake<IsSlashGame extends boolean = false> extends EventEmitter {
   gameBoard: string[];
   score: number;
 
-  constructor(options?: SnakeConstructorOptions<IsSlashGame>);
+  constructor(options: SnakeConstructorOptions<IsSlashGame>);
 
   getBoardContent(isSkull: boolean): string;
   isSnake(pos: Position): Position | false; // I think this should be boolean type in the src

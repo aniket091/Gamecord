@@ -28,7 +28,7 @@ export class MatchPairs<IsSlashGame extends boolean = false> extends EventEmitte
   tilesTurned: number;
   length: number;
 
-  constructor(options?: MatchPairsConstructorOptions<IsSlashGame>);
+  constructor(options: MatchPairsConstructorOptions<IsSlashGame>);
 
   sendMessage(
     content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions

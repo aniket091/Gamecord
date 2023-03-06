@@ -33,7 +33,7 @@ export class TwoZeroFourEight<IsSlashGame extends boolean = false> extends Event
   length: number;
   score: number;
 
-  constructor(options?: TwoZeroFourEightConstructorOptions<IsSlashGame>);
+  constructor(options: TwoZeroFourEightConstructorOptions<IsSlashGame>);
 
   sendMessage(
     content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions

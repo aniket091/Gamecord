@@ -38,7 +38,7 @@ export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
   guessed: string[];
   damage: number;
 
-  constructor(options?: HangmanConstructorOptions<IsSlashGame>);
+  constructor(options: HangmanConstructorOptions<IsSlashGame>);
 
   getBoardContent(): string;
   sendMessage(
