@@ -19,8 +19,7 @@ export interface HangmanBody {
   boots?: string;
 }
 
-export interface HangmanConstructorOptions<IsSlashGame extends boolean>
-  extends BaseConstructorOptions<IsSlashGame> {
+export interface HangmanConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: { title?: string; color?: string };
   hangman?: HangmanBody;
   customWord?: string | null;
@@ -43,9 +42,7 @@ export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
 
   getBoardContent(): string;
   sendMessage(
-    content: string | MessagePayload | IsSlashGame extends true
-      ? InteractionEditReplyOptions
-      : MessageEditOptions
+    content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions
   ): Promise<Message>;
   startGame(): Promise<void>;
   handleButtons(msg: Message): void;
