@@ -1,6 +1,5 @@
 import {
   AttachmentBuilder,
-  ButtonStyle,
   ChatInputCommandInteraction,
   InteractionEditReplyOptions,
   Message,
@@ -8,7 +7,7 @@ import {
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, Position } from './Base';
+import { BaseConstructorOptions, ButtonStyle, Position } from './Base';
 
 export interface TwoZeroFourEightConstructorOptions<IsSlashGame extends boolean>
   extends BaseConstructorOptions<IsSlashGame> {
