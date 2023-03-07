@@ -1,12 +1,6 @@
-import {
-  ChatInputCommandInteraction,
-  InteractionEditReplyOptions,
-  Message,
-  MessageEditOptions,
-  MessagePayload,
-} from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, Position } from './Base';
+import { BaseConstructorOptions, MessageType, Position } from './Base';
 
 export interface SnakeConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: {
@@ -36,7 +30,7 @@ export interface SnakeConstructorOptions<IsSlashGame extends boolean> extends Ba
 
 export class Snake<IsSlashGame extends boolean = false> extends EventEmitter {
   options: SnakeConstructorOptions<IsSlashGame>;
-  message: IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+  message: MessageType<IsSlashGame>;
   snake: Position[];
   apple: Position;
   snakeLength: number;
@@ -49,7 +43,7 @@ export class Snake<IsSlashGame extends boolean = false> extends EventEmitter {
   isSnake(pos: Position): Position | false; // I think this should be boolean type in the src
   updateFoodLoc(): void;
   sendMessage(
-    content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions
+    content: string | MessagePayload | (IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions)
   ): Promise<Message>;
   startGame(): Promise<void>;
   updateGame(msg: Message): Promise<Message>;

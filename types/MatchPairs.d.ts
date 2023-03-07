@@ -1,14 +1,13 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  ChatInputCommandInteraction,
   InteractionEditReplyOptions,
   Message,
   MessageEditOptions,
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, Position } from './Base';
+import { BaseConstructorOptions, MessageType, Position } from './Base';
 
 export interface MatchPairsConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: { title?: string; color?: string; description?: string };
@@ -20,7 +19,7 @@ export interface MatchPairsConstructorOptions<IsSlashGame extends boolean> exten
 
 export class MatchPairs<IsSlashGame extends boolean = false> extends EventEmitter {
   options: MatchPairsConstructorOptions<IsSlashGame>;
-  message: IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+  message: MessageType<IsSlashGame>;
   emojis: string[];
   remainingPairs: number;
   components: ActionRowBuilder<ButtonBuilder>;
@@ -31,7 +30,7 @@ export class MatchPairs<IsSlashGame extends boolean = false> extends EventEmitte
   constructor(options: MatchPairsConstructorOptions<IsSlashGame>);
 
   sendMessage(
-    content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions
+    content: string | MessagePayload | (IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions)
   ): Promise<Message>;
   startGame(): Promise<void>;
   getPairEmoji(emoji: string): (Position & { id: number })[];

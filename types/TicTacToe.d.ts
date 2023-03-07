@@ -1,7 +1,6 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  ChatInputCommandInteraction,
   InteractionEditReplyOptions,
   Message,
   MessageEditOptions,
@@ -9,9 +8,9 @@ import {
   User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, ButtonStyle } from './Base';
+import { BaseConstructorOptions, ButtonStyle, MessageType } from './Base';
 
-export type GameCellState = 0 | 1 | 2;
+export type TicTacToeGameCellState = 0 | 1 | 2;
 
 export interface TicTacToeConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   opponent: User;
@@ -39,25 +38,25 @@ export interface TicTacToeConstructorOptions<IsSlashGame extends boolean> extend
 
 export class TicTacToe<IsSlashGame extends boolean = false> extends EventEmitter {
   options: TicTacToeConstructorOptions<IsSlashGame>;
-  message: IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+  message: MessageType<IsSlashGame>;
   opponent: User;
   gameBoard: [
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState,
-    GameCellState
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState,
+    TicTacToeGameCellState
   ];
   player1Turn: boolean;
 
   constructor(options: TicTacToeConstructorOptions<IsSlashGame>);
 
   sendMessage(
-    content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions
+    content: string | MessagePayload | (IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions)
   ): Promise<Message>;
   startGame(): Promise<void>;
   TicTacToeGame(msg: Message): Promise<void>;
@@ -67,6 +66,7 @@ export class TicTacToe<IsSlashGame extends boolean = false> extends EventEmitter
   hasWonGame(player: 1 | 2): boolean;
   getPlayerEmoji(): string;
   getTurnMessage(msg?: string): string;
-  getButton(btn: GameCellState): { emoji: string; style: ButtonStyle };
+  // The functiom argument name 'btn' should be changed to 'state' or something like this
+  getButton(btn: TicTacToeGameCellState): { emoji: string; style: ButtonStyle };
   getComponents(): ActionRowBuilder<ButtonBuilder>;
 }

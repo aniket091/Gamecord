@@ -1,14 +1,13 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  ChatInputCommandInteraction,
   InteractionEditReplyOptions,
   Message,
   MessageEditOptions,
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions } from './Base';
+import { BaseConstructorOptions, MessageType } from './Base';
 
 // I am bad at naming
 export interface HangmanBody {
@@ -31,7 +30,7 @@ export interface HangmanConstructorOptions<IsSlashGame extends boolean> extends 
 
 export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
   options: HangmanConstructorOptions<IsSlashGame>;
-  message: IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+  message: MessageType<IsSlashGame>;
   hangman: HangmanBody;
   word: string | null;
   buttonPage: number;
@@ -42,7 +41,7 @@ export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
 
   getBoardContent(): string;
   sendMessage(
-    content: string | MessagePayload | IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions
+    content: string | MessagePayload | (IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions)
   ): Promise<Message>;
   startGame(): Promise<void>;
   handleButtons(msg: Message): void;

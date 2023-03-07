@@ -7,8 +7,10 @@ export interface Position {
   y: number;
 }
 
+export type MessageType<IsSlashGame extends boolean> = IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+
 export interface BaseConstructorOptions<IsSlashGame extends boolean> {
   isSlashGame?: IsSlashGame;
-  message: IsSlashGame extends true ? ChatInputCommandInteraction : Message;
+  message: MessageType<IsSlashGame>;
   playerOnlyMessage: string | false; // Wouldn't string | null be more natural?
 }
