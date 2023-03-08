@@ -8,3 +8,5 @@ export * from './types/MatchPairs';
 export * from './types/Snake';
 export * from './types/TicTacToe';
 export * from './types/Wordle';
+
+export * from './types/Emojify';
