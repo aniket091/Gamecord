@@ -20,7 +20,7 @@ type CharsKeys =
   | '/'
   | ' ';
 
-export const Emojity: {
+export const Emojify: {
   (content: string): string;
   chars: Record<CharsKeys, string>;
 };
