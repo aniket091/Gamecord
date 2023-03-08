@@ -1,5 +1,8 @@
 import { ChatInputCommandInteraction, Message } from 'discord.js';
 
+// Helper type
+export type DeepRequired<T> = T extends object ? { [K in keyof T]-?: DeepRequired<T[K]> } : T;
+
 export type ButtonStyle = 'PRIMARY' | 'SECONDARY' | 'SUCCESS' | 'DANGER';
 
 export interface Position {

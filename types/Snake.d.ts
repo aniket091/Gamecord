@@ -1,6 +1,6 @@
 import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, MessageType, Position } from './Base';
+import { BaseConstructorOptions, DeepRequired, MessageType, Position } from './Base';
 
 export interface SnakeConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: {
@@ -29,7 +29,7 @@ export interface SnakeConstructorOptions<IsSlashGame extends boolean> extends Ba
 }
 
 export class Snake<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: SnakeConstructorOptions<IsSlashGame>;
+  options: DeepRequired<SnakeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   snake: Position[];
   apple: Position;

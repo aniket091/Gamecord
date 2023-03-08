@@ -1,6 +1,6 @@
 import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, MessageType } from './Base';
+import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
 export interface FastTypeConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: {
@@ -15,7 +15,7 @@ export interface FastTypeConstructorOptions<IsSlashGame extends boolean> extends
 }
 
 export class FastType<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: FastTypeConstructorOptions<IsSlashGame>;
+  options: DeepRequired<FastTypeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
 
   constructor(options: FastTypeConstructorOptions<IsSlashGame>);

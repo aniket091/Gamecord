@@ -7,7 +7,7 @@ import {
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, MessageType, Position } from './Base';
+import { BaseConstructorOptions, DeepRequired, MessageType, Position } from './Base';
 
 export interface MatchPairsConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: { title?: string; color?: string; description?: string };
@@ -18,7 +18,7 @@ export interface MatchPairsConstructorOptions<IsSlashGame extends boolean> exten
 }
 
 export class MatchPairs<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: MatchPairsConstructorOptions<IsSlashGame>;
+  options: DeepRequired<MatchPairsConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   emojis: string[];
   remainingPairs: number;

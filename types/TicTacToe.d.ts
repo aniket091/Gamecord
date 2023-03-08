@@ -7,8 +7,8 @@ import {
   MessagePayload,
   User,
 } from 'discord.js';
-import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, ButtonStyle, MessageType } from './Base';
+import { Approve } from './Approve';
+import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
 
 export type TicTacToeGameCellState = 0 | 1 | 2;
 
@@ -30,14 +30,14 @@ export interface TicTacToeConstructorOptions<IsSlashGame extends boolean> extend
   oButtonStyle?: ButtonStyle;
   turnMessage?: string;
   winMessage?: string;
-  tueMessage?: string;
+  tieMessage?: string;
   timeoutMessage?: string;
   requestMessage?: string;
   regectMessage?: string;
 }
 
-export class TicTacToe<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: TicTacToeConstructorOptions<IsSlashGame>;
+export class TicTacToe<IsSlashGame extends boolean = false> extends Approve<TicTacToeConstructorOptions<IsSlashGame>> {
+  options: DeepRequired<TicTacToeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   opponent: User;
   gameBoard: [

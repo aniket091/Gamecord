@@ -7,7 +7,7 @@ import {
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, MessageType } from './Base';
+import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
 // I am bad at naming
 export interface HangmanBody {
@@ -29,7 +29,7 @@ export interface HangmanConstructorOptions<IsSlashGame extends boolean> extends 
 }
 
 export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: HangmanConstructorOptions<IsSlashGame>;
+  options: DeepRequired<HangmanConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   hangman: HangmanBody;
   word: string | null;

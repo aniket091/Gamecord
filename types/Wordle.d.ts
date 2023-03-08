@@ -6,7 +6,7 @@ import {
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, MessageType } from './Base';
+import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
 export interface WordleConstructorOptions<IsSlashGame extends boolean> extends BaseConstructorOptions<IsSlashGame> {
   embed?: { title?: string; color?: string };
@@ -17,7 +17,7 @@ export interface WordleConstructorOptions<IsSlashGame extends boolean> extends B
 }
 
 export class Wordle<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: WordleConstructorOptions<IsSlashGame>;
+  options: DeepRequired<WordleConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   word: string | null;
   guessed: string[];

@@ -6,7 +6,7 @@ import {
   MessagePayload,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
-import { BaseConstructorOptions, ButtonStyle, MessageType, Position } from './Base';
+import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType, Position } from './Base';
 
 export interface TwoZeroFourEightConstructorOptions<IsSlashGame extends boolean>
   extends BaseConstructorOptions<IsSlashGame> {
@@ -25,7 +25,7 @@ export interface TwoZeroFourEightConstructorOptions<IsSlashGame extends boolean>
 }
 
 export class TwoZeroFourEight<IsSlashGame extends boolean = false> extends EventEmitter {
-  options: TwoZeroFourEightConstructorOptions<IsSlashGame>;
+  options: DeepRequired<TwoZeroFourEightConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   gameBoard: string[];
   mergedPos: Position[];
