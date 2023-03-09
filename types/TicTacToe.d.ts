@@ -7,7 +7,7 @@ import {
   MessagePayload,
   User,
 } from 'discord.js';
-import { Approve } from './Approve';
+import { Approve, ApproveConstructorOptions } from './Approve';
 import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
 
 export type TicTacToeGameCellState = 0 | 1 | 2;
@@ -33,11 +33,11 @@ export interface TicTacToeConstructorOptions<IsSlashGame extends boolean> extend
   tieMessage?: string;
   timeoutMessage?: string;
   requestMessage?: string;
-  regectMessage?: string;
+  rejectMessage?: string;
 }
 
-export class TicTacToe<IsSlashGame extends boolean = false> extends Approve<TicTacToeConstructorOptions<IsSlashGame>> {
-  options: DeepRequired<TicTacToeConstructorOptions<IsSlashGame>>;
+export class TicTacToe<IsSlashGame extends boolean = false> extends Approve {
+  options: DeepRequired<ApproveConstructorOptions & TicTacToeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   opponent: User;
   gameBoard: [
@@ -53,7 +53,7 @@ export class TicTacToe<IsSlashGame extends boolean = false> extends Approve<TicT
   ];
   player1Turn: boolean;
 
-  constructor(options: TicTacToeConstructorOptions<IsSlashGame>);
+  constructor(options: ApproveConstructorOptions & TicTacToeConstructorOptions<IsSlashGame>);
 
   sendMessage(
     content: string | MessagePayload | (IsSlashGame extends true ? InteractionEditReplyOptions : MessageEditOptions)
