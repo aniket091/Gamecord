@@ -7,6 +7,7 @@ export * from './types/FastType';
 export * from './types/FindEmoji';
 export * from './types/Fishy';
 export * from './types/Flood';
+export * from './types/GuessThePokemon';
 export * from './types/Hangman';
 export * from './types/MatchPairs';
 export * from './types/Snake';
