@@ -68,5 +68,5 @@ export class TicTacToe<IsSlashGame extends boolean = false> extends Approve {
   getTurnMessage(msg?: string): string;
   // The functiom argument name 'btn' should be changed to 'state' or something like this
   getButton(btn: TicTacToeGameCellState): { emoji: string; style: ButtonStyle };
-  getComponents(): ActionRowBuilder<ButtonBuilder>;
+  getComponents(): ActionRowBuilder<ButtonBuilder>[];
 }

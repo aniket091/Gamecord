@@ -39,5 +39,5 @@ export class FindEmoji<IsSlashGame extends boolean = false> extends EventEmitter
   ): Promise<Message>;
   startGame(): Promise<void>;
   gameOver(msg: Message, result: boolean): Promise<Message>;
-  getComponents(showEmoji: boolean): ActionRowBuilder<ButtonBuilder>;
+  getComponents(showEmoji: boolean): ActionRowBuilder<ButtonBuilder>[];
 }
