@@ -6,7 +6,7 @@ export interface ApproveConstructorOptions {
   embed: {
     requestTitle?: string;
     requestColor?: string;
-    rejectTitlee?: string;
+    rejectTitle?: string;
     rejectColor?: string;
   };
   buttons: {
