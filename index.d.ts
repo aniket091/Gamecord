@@ -11,6 +11,7 @@ export * from './types/GuessThePokemon';
 export * from './types/Hangman';
 export * from './types/MatchPairs';
 export * from './types/Minesweeper';
+export * from './types/Slots';
 export * from './types/Snake';
 export * from './types/TicTacToe';
 export * from './types/Wordle';
