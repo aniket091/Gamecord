@@ -14,6 +14,7 @@ export * from './types/Minesweeper';
 export * from './types/Slots';
 export * from './types/Snake';
 export * from './types/TicTacToe';
+export * from './types/Trivia';
 export * from './types/Wordle';
 
 export * from './types/Emojify';
