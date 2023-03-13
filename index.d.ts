@@ -16,5 +16,6 @@ export * from './types/Snake';
 export * from './types/TicTacToe';
 export * from './types/Trivia';
 export * from './types/Wordle';
+export * from './types/WouldYouRather';
 
 export * from './types/Emojify';
