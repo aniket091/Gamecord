@@ -3,6 +3,7 @@ export const version: string;
 export * from './types/Base';
 
 export * from './types/2048';
+export * from './types/Connect4';
 export * from './types/FastType';
 export * from './types/FindEmoji';
 export * from './types/Fishy';
