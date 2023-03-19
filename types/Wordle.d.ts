@@ -4,6 +4,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
@@ -21,6 +22,12 @@ export class Wordle<IsSlashGame extends boolean = false> extends EventEmitter {
   message: MessageType<IsSlashGame>;
   word: string | null;
   guessed: string[];
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'lose'; player: User; word: string | null; guessed: string[] }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: WordleConstructorOptions<IsSlashGame>);
 

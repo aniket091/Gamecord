@@ -53,6 +53,17 @@ export class TicTacToe<IsSlashGame extends boolean = false> extends Approve {
   ];
   player1Turn: boolean;
 
+  on(
+    eventName: 'gameOver',
+    listener: (result: {
+      result: 'win' | 'tie' | 'timeout';
+      player: User;
+      opponent: User;
+      gameBoard: TicTacToe['gameBoard'];
+    }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
+
   constructor(options: ApproveConstructorOptions & TicTacToeConstructorOptions<IsSlashGame>);
 
   sendMessage(

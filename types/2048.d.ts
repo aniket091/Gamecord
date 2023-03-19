@@ -4,6 +4,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType, Position } from './Base';
@@ -31,6 +32,9 @@ export class TwoZeroFourEight<IsSlashGame extends boolean = false> extends Event
   mergedPos: Position[];
   length: number;
   score: number;
+
+  on(eventName: 'gameOver', listener: (result: { result: 'win' | 'lose'; player: User; score: number }) => void): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: TwoZeroFourEightConstructorOptions<IsSlashGame>);
 

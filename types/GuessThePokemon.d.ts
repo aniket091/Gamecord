@@ -1,4 +1,4 @@
-import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
@@ -29,6 +29,12 @@ export class GuessThePokemon<IsSlashGame extends boolean = false> extends EventE
   options: DeepRequired<GuessThePokemonConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   pokemon: Pokemon;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'lose'; player: User; pokemon: Pokemon }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: GuessThePokemonConstructorOptions<IsSlashGame>);
 

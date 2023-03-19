@@ -5,6 +5,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType, Position } from './Base';
@@ -26,6 +27,12 @@ export class MatchPairs<IsSlashGame extends boolean = false> extends EventEmitte
   selected: (Position & { id: number }) | null;
   tilesTurned: number;
   length: number;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'lose'; player: User; tilesTurned: number; remainingPairs: number }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: MatchPairsConstructorOptions<IsSlashGame>);
 

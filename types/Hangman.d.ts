@@ -5,6 +5,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
@@ -36,6 +37,18 @@ export class Hangman<IsSlashGame extends boolean = false> extends EventEmitter {
   buttonPage: number;
   guessed: string[];
   damage: number;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: {
+      result: 'win' | 'lose';
+      player: User;
+      word: string | null;
+      damage: number;
+      guessed: string[];
+    }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: HangmanConstructorOptions<IsSlashGame>);
 

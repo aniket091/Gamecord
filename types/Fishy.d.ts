@@ -1,12 +1,4 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  InteractionEditReplyOptions,
-  Message,
-  MessageEditOptions,
-  MessagePayload,
-  Snowflake,
-} from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, Snowflake, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
@@ -15,12 +7,7 @@ export interface Fish {
   price: number;
 }
 
-export interface Fishes {
-  junk: Fish;
-  common: Fish;
-  uncommon: Fish;
-  rare: Fish;
-}
+export type Fishes = Record<'junk' | 'common' | 'uncommon' | 'rare', Fish>;
 
 // XXX: Someone suggest a better name, this name has a lot of ambiguity
 export interface Player {
@@ -50,6 +37,12 @@ export class Fishy<IsSlashGame extends boolean = false> extends EventEmitter {
   message: MessageType<IsSlashGame>;
   player: Player;
   fishes: Fishes;
+
+  on(
+    eventName: 'catchFish' | 'sellFish',
+    listener: (fishy: { player: User; fishType: keyof Fishes; fish: Fish }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: FishyConstructorOptions<IsSlashGame>);
 

@@ -5,6 +5,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
@@ -29,7 +30,15 @@ export interface MinesweeperConstructorOptions<IsSlashGame extends boolean>
 export class Minesweeper<IsSlashGame extends boolean = false> extends EventEmitter {
   options: DeepRequired<MinesweeperConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
-  pokemon: Pokemon;
+  emojis: { flag: string; mine: string };
+  gameBoard: (number | boolean)[];
+  length: number;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'lose'; player: User; blocksTurned: number }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: MinesweeperConstructorOptions<IsSlashGame>);
 

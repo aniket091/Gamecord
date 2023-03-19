@@ -1,4 +1,4 @@
-import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType } from './Base';
 
@@ -17,6 +17,14 @@ export interface FastTypeConstructorOptions<IsSlashGame extends boolean> extends
 export class FastType<IsSlashGame extends boolean = false> extends EventEmitter {
   options: DeepRequired<FastTypeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
+  timeTaken: number | null;
+  wpm: number;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'lose'; player: User; timeTaken: number; wpm: number }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: FastTypeConstructorOptions<IsSlashGame>);
 

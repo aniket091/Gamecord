@@ -1,4 +1,4 @@
-import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, DeepRequired, MessageType, Position } from './Base';
 
@@ -36,6 +36,9 @@ export class Snake<IsSlashGame extends boolean = false> extends EventEmitter {
   snakeLength: number;
   gameBoard: string[];
   score: number;
+
+  on(eventName: 'gameOver', listener: (result: { result: 'win' | 'lose'; player: User; score: number }) => void): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: SnakeConstructorOptions<IsSlashGame>);
 

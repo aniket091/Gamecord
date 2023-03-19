@@ -31,6 +31,12 @@ export class Connect4<IsSlashGame extends boolean = false> extends Approve {
   player1Turn: boolean;
   gameBoard: string[];
 
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'win' | 'tie' | 'timeout'; player: User; opponent: User }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
+
   constructor(options: ApproveConstructorOptions & Connect4ConstructorOptions<IsSlashGame>);
 
   getBoardContent(): string;

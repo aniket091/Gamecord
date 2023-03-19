@@ -1,4 +1,4 @@
-import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload } from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
 
@@ -22,6 +22,18 @@ export class Flood<IsSlashGame extends boolean = false> extends EventEmitter {
   gameBoard: string[];
   maxTurns: number;
   turns: number;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: {
+      result: 'win' | 'lose';
+      player: User;
+      turns: number;
+      maxTurns: number;
+      boardColor: string;
+    }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: FloodConstructorOptions<IsSlashGame>);
 

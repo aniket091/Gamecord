@@ -37,6 +37,18 @@ export class RockPaperScissors<IsSlashGame extends boolean = false> extends Appr
   playerPick: string | null;
   opponentPick: string | null;
 
+  on(
+    eventName: 'gameOver',
+    listener: (result: {
+      result: 'win' | 'tie' | 'timeout';
+      player: User;
+      opponent: User;
+      playerPick: string | null;
+      opponentPick: string | null;
+    }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
+
   constructor(options: ApproveConstructorOptions & RockPaperScisdorsConstructorOptions<IsSlashGame>);
 
   sendMessage(

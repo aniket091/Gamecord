@@ -5,6 +5,7 @@ import {
   Message,
   MessageEditOptions,
   MessagePayload,
+  User,
 } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
@@ -39,6 +40,17 @@ export class Trivia<IsSlashGame extends boolean = false> extends EventEmitter {
         answer: string;
         options: string[];
       };
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: {
+      result: 'win' | 'lose';
+      player: User;
+      question: Trivia['trivia'];
+      selected: string | number | null;
+    }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: TriviaConstructorOptions<IsSlashGame>);
 

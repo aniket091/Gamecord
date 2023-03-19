@@ -1,11 +1,4 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  InteractionEditReplyOptions,
-  Message,
-  MessageEditOptions,
-  MessagePayload,
-} from 'discord.js';
+import { InteractionEditReplyOptions, Message, MessageEditOptions, MessagePayload, User } from 'discord.js';
 import { EventEmitter } from 'node:events';
 import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
 
@@ -36,6 +29,12 @@ export class WouldYouRather<IsSlashGame extends boolean = false> extends EventEm
   options: DeepRequired<WouldYouRatherConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   data: WouldYouRatherData | {} | null;
+
+  on(
+    eventName: 'gameOver',
+    listener: (result: { result: 'finish'; player: User; question: WouldYouRatherData; selected: string }) => void
+  ): this;
+  once(...args: Parameters<this['on']>): this;
 
   constructor(options: WouldYouRatherConstructorOptions<IsSlashGame>);
 
