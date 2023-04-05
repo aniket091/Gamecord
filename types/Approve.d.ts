@@ -3,13 +3,13 @@ import { EventEmitter } from 'node:events';
 import { DeepRequired, MessageType } from './Base';
 
 export interface ApproveConstructorOptions {
-  embed: {
+  embed?: {
     requestTitle?: string;
     requestColor?: string;
     rejectTitle?: string;
     rejectColor?: string;
   };
-  buttons: {
+  buttons?: {
     accept?: string;
     reject?: string;
   };
