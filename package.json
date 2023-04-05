@@ -3,6 +3,7 @@
   "version": "4.2.0",
   "description": "Discord Gamecord is a powerful npm package with a collection of minigames for your discord bot",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "cd test && node ."
   },
@@ -31,3 +32,4 @@
     "src": "src"
   }
 }
+
