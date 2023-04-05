@@ -8,7 +8,7 @@ import {
   User,
 } from 'discord.js';
 import { Approve, ApproveConstructorOptions } from './Approve';
-import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType } from './Base';
+import { BaseConstructorOptions, ButtonStyle, DeepRequired, MessageType, Tuple } from './Base';
 
 export type TicTacToeGameCellState = 0 | 1 | 2;
 
@@ -40,17 +40,7 @@ export class TicTacToe<IsSlashGame extends boolean = false> extends Approve {
   options: DeepRequired<ApproveConstructorOptions & TicTacToeConstructorOptions<IsSlashGame>>;
   message: MessageType<IsSlashGame>;
   opponent: User;
-  gameBoard: [
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState,
-    TicTacToeGameCellState
-  ];
+  gameBoard: Tuple<9, TicTacToeGameCellState>;
   player1Turn: boolean;
 
   on(
