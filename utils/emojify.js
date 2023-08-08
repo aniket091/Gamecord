@@ -8,8 +8,6 @@ module.exports = function (content) {
   content = content.toLowerCase().split('');
 
   content = content.map(letter => {
-    console.log(chars[letter])
-
     if (/[a-z]/g.test(letter)) return `:regional_indicator_${letter}:`;
     else if (chars[letter]) return chars[letter];
     else return letter;
