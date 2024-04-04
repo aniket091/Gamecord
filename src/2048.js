@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, AttachmentBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
 const { disableButtons, formatMessage, move, oppDirection, ButtonBuilder } = require('../utils/utils');
 const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 const events = require('events');
@@ -24,7 +24,7 @@ module.exports = class TwoZeroFourEight extends events {
     if (!options.emojis.right) options.emojis.right = '➡️';
     
     if (!options.timeoutTime) options.timeoutTime = 60000;
-    if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if (!options.buttonStyle) options.buttonStyle = ButtonStyle.Primary;
 
 
     if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
@@ -36,7 +36,6 @@ module.exports = class TwoZeroFourEight extends events {
     if (typeof options.emojis.left !== 'string') throw new TypeError('INVALID_EMOJIS: left emoji must be an string.');
     if (typeof options.emojis.right !== 'string') throw new TypeError('INVALID_EMOJIS: right emoji must be an string.');
     if (typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
-    if (typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
     if (options.playerOnlyMessage !== false) {
       if (!options.playerOnlyMessage) options.playerOnlyMessage = 'Only {player} can use these buttons.';
       if (typeof options.playerOnlyMessage !== 'string') throw new TypeError('INVALID_MESSAGE: playerOnlyMessage option must be a string.');
