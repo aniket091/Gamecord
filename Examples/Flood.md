@@ -2,6 +2,7 @@
 
 ```js
 const { Flood } = require('discord-gamecord');
+const { ButtonStyle } = require('discord.js'):
 
 const Game = new Flood({
   message: message,
@@ -12,7 +13,7 @@ const Game = new Flood({
   },
   difficulty: 13,
   timeoutTime: 60000,
-  buttonStyle: 'PRIMARY',
+  buttonStyle: ButtonStyle.Primary,
   emojis: ['🟥', '🟦', '🟧', '🟪', '🟩'],
   winMessage: 'You won! You took **{turns}** turns.',
   loseMessage: 'You lost! You took **{turns}** turns.',
