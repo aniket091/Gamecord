@@ -2,6 +2,7 @@
 
 ```js
 const { RockPaperScissors } = require('discord-gamecord');
+const { ButtonStyle } = require('discord.js'):
 
 const Game = new RockPaperScissors({
   message: message,
@@ -24,7 +25,7 @@ const Game = new RockPaperScissors({
   },
   mentionUser: true,
   timeoutTime: 60000,
-  buttonStyle: 'PRIMARY',
+  buttonStyle: ButtonStyle.Primary,
   pickMessage: 'You choose {emoji}.',
   winMessage: '**{player}** won the Game! Congratulations!',
   tieMessage: 'The Game tied! No one won the Game!',
