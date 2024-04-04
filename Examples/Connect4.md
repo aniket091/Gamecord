@@ -2,6 +2,7 @@
 
 ```js
 const { Connect4 } = require('discord-gamecord');
+const { ButtonStyle } = require('discord.js'):
 
 const Game = new Connect4({
   message: message,
@@ -19,7 +20,7 @@ const Game = new Connect4({
   },
   mentionUser: true,
   timeoutTime: 60000,
-  buttonStyle: 'PRIMARY',
+  buttonStyle: ButtonStyle.Primary,
   turnMessage: '{emoji} | Its turn of player **{player}**.',
   winMessage: '{emoji} | **{player}** won the Connect4 Game.',
   tieMessage: 'The Game tied! No one won the Game!',
