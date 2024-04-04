@@ -2,6 +2,7 @@
 
 ```js
 const { TicTacToe } = require('discord-gamecord');
+const { ButtonStyle } = require('discord.js'):
 
 const Game = new TicTacToe({
   message: message,
@@ -20,8 +21,8 @@ const Game = new TicTacToe({
   },
   mentionUser: true,
   timeoutTime: 60000,
-  xButtonStyle: 'DANGER',
-  oButtonStyle: 'PRIMARY',
+  xButtonStyle: ButtonStyle.Danger,
+  oButtonStyle: ButtonStyle.Primary,
   turnMessage: '{emoji} | Its turn of player **{player}**.',
   winMessage: '{emoji} | **{player}** won the TicTacToe Game.',
   tieMessage: 'The Game tied! No one won the Game!',

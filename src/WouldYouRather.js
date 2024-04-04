@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const { formatMessage, ButtonBuilder } = require('../utils/utils');
 const fetch = require('node-fetch');
 const events = require('events');
@@ -21,7 +21,7 @@ module.exports = class WouldYouRather extends events {
     if (!options.buttons.option1) options.buttons.option1 = 'Option 1';
     if (!options.buttons.option2) options.buttons.option2 = 'Option 2';
     if (!options.errMessage) options.errMessage = 'Unable to fetch question data! Please try again.';
-    if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if (!options.buttonStyle) options.buttonStyle = ButtonStyle.Primary;
 
 
     if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
@@ -30,7 +30,6 @@ module.exports = class WouldYouRather extends events {
     if (typeof options.buttons !== 'object') throw new TypeError('INVALID_BUTTON: buttons option must be an object.');
     if (typeof options.buttons.option1 !== 'string') throw new TypeError('INVALID_BUTTON: option1 button must be a string.');
     if (typeof options.buttons.option2 !== 'string') throw new TypeError('INVALID_BUTTON: option2 button must be a string.');
-    if (typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
     if (typeof options.errMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Error message option must be a string.');
     if (options.playerOnlyMessage !== false) {
       if (!options.playerOnlyMessage) options.playerOnlyMessage = 'Only {player} can use these buttons.';
@@ -98,15 +97,15 @@ module.exports = class WouldYouRather extends events {
     const WouldYouRatherGame = { player: this.message.author, question: this.data, selected: this.data['option'+result] };
     this.emit('gameOver', { result: 'finish', ...WouldYouRatherGame });
 
-    const prnt1 = Math.floor(parseInt(this.data.option1_votes) / (parseInt(this.data.option1_votes) + parseInt(this.data.option2_votes)) * 100);
-    const prnt2 = Math.floor(parseInt(this.data.option2_votes) / (parseInt(this.data.option1_votes) + parseInt(this.data.option2_votes)) * 100);
+    const prnt1 = Math.floor((parseInt(this.data.option1Votes) / (parseInt(this.data.option1Votes) + parseInt(this.data.option2Votes))) * 100);
+    const prnt2 = Math.floor((parseInt(this.data.option2Votes) / (parseInt(this.data.option1Votes) + parseInt(this.data.option2Votes))) * 100);
 
 
     const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
-    .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
+    //.addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` }) <-- Not supported by the API as of now, waiting for Aniket to implement it back.
 
     if (result === '1') embed.setDescription(`**1. ${this.data.option1} (${prnt1}%)**\n2. ${this.data.option2} (${prnt2})%`);
     else embed.setDescription(`1. ${this.data.option1} (${prnt1}%)\n**2. ${this.data.option2} (${prnt2})%**`);

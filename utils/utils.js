@@ -1,4 +1,4 @@
-const { ButtonBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
   disableButtons(components) {
@@ -74,7 +74,7 @@ module.exports.ButtonBuilder = class buttonBuilder extends ButtonBuilder {
   }
 
   setStyle(style) {
-    this.data.style = (style==='PRIMARY') ? 1 : (style==='SUCCESS') ? 3 : (style==='DANGER') ? 4 : 2;
+    this.data.style = (style===ButtonStyle.Primary) ? 1 : (style===ButtonStyle.Success) ? 3 : (style===ButtonStyle.Danger) ? 4 : 2;
     return this;
   }
 
