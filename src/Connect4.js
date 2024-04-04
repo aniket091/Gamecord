@@ -1,5 +1,5 @@
-const { disableButtons, formatMessage, ButtonBuilder } = require('../utils/utils');
-const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { disableButtons, formatMessage, ButtonBuilder,  } = require('../utils/utils');
+const { EmbedBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const approve = require('../utils/approve');
 
 
@@ -25,7 +25,7 @@ module.exports = class Connect4 extends approve {
     if (!options.emojis.player2) options.emojis.player2 = '🟡';
 
     if (!options.timeoutTime) options.timeoutTime = 60000;
-    if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if (!options.buttonStyle) options.buttonStyle = ButtonStyle.Primary;
     if (!options.turnMessage) options.turnMessage = '{emoji} | Its turn of player **{player}**.';
     if (!options.winMessage) options.winMessage = '{emoji} | **{player}** won the Connect4 Game.';
     if (!options.tieMessage) options.tieMessage = 'The Game tied! No one won the Game!';
@@ -43,7 +43,6 @@ module.exports = class Connect4 extends approve {
     if (typeof options.emojis.player1 !== 'string') throw new TypeError('INVALID_EMOJIS: player1 emoji must be a string.');
     if (typeof options.emojis.player2 !== 'string') throw new TypeError('INVALID_EMOJIS: player2 emoji must be a string.');
     if (typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
-    if (typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
     if (typeof options.turnMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Turn message must be a string.');
     if (typeof options.winMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Win message must be a string.');
     if (typeof options.tieMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Tie message must be a string.');
