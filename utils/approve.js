@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const { formatMessage, ButtonBuilder } = require('./utils');
 const events = require('events');
 
@@ -43,8 +43,8 @@ module.exports = class Approve extends events {
       .setTitle(this.options.embed.requestTitle)
       .setDescription(formatMessage(this.options, 'requestMessage'));
 
-      const btn1 = new ButtonBuilder().setLabel(this.options.buttons.accept).setCustomId('approve_accept').setStyle('SUCCESS');
-      const btn2 = new ButtonBuilder().setLabel(this.options.buttons.reject).setCustomId('approve_reject').setStyle('DANGER');
+      const btn1 = new ButtonBuilder().setLabel(this.options.buttons.accept).setCustomId('approve_accept').setStyle(ButtonStyle.Success);
+      const btn2 = new ButtonBuilder().setLabel(this.options.buttons.reject).setCustomId('approve_reject').setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder().addComponents(btn1, btn2);
 
       const content = this.options.mentionUser ? '<@!'+this.opponent.id+'>' : null;
