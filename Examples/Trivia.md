@@ -17,6 +17,7 @@ const Game = new Trivia({
   falseButtonStyle: 'DANGER',
   mode: 'multiple',  // multiple || single
   difficulty: 'medium',  // easy || medium || hard
+  category: 'Politics', // General Knowledge || Entertainment: Books || Entertainment: Film || Entertainment: Music || Entertainment: Musicals & Theatres || Entertainment: Television || Entertainment: Video Games || Entertainment: Board Games || Science & Nature || Science: Computers || Science: Mathematics || Mythology || Sports || Geography || History || Politics || Art || Celebrities || Animals
   winMessage: 'You won! The correct answer is {answer}.',
   loseMessage: 'You lost! The correct answer is {answer}.',
   errMessage: 'Unable to fetch question data! Please try again.',
