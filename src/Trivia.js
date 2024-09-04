@@ -1,6 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
 const { decode, formatMessage, shuffleArray, disableButtons, ButtonBuilder } = require('../utils/utils');
 const difficulties = ['easy', 'medium', 'hard'];
+const categories = ['General Knowledge', 'Entertainment: Books', 'Entertainment: Film', 'Entertainment: Music', 'Entertainment: Musicals & Theatres', 'Entertainment: Television', 'Entertainment: Video Games', 'Entertainment: Board Games', 'Science & Nature', 'Science: Computers', 'Science: Mathematics', 'Mythology', 'Sports', 'Geography', 'History', 'Politics', 'Art', 'Celebrities', 'Animals'];
 const fetch = require('node-fetch');
 const events = require('events');
 
@@ -12,12 +13,13 @@ module.exports = class Trivia extends events {
     if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
     if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
     if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
-
-
+    
+    
     if (!options.embed) options.embed = {};
     if (!options.embed.title) options.embed.title = 'Trivia';
     if (!options.embed.color) options.embed.color = '#5865F2';
     if (!options.embed.description) options.embed.description = 'You have 60 seconds to guess the answer.';
+    
 
     if (!options.mode) options.mode = 'multiple';
     if (!options.timeoutTime) options.timeoutTime = 60000;
@@ -25,6 +27,8 @@ module.exports = class Trivia extends events {
     if (!options.trueButtonStyle) options.trueButtonStyle = 'SUCCESS';
     if (!options.falseButtonStyle) options.falseButtonStyle = 'DANGER';
     if (!options.difficulty) options.difficulty = difficulties[Math.floor(Math.random()*difficulties.length)];
+    if (!options.category) options.category = categories[Math.floor(Math.random()*categories.length)];
+
 
     if (!options.winMessage) options.winMessage = 'You won! The correct answer is {answer}.';
     if (!options.loseMessage) options.loseMessage = 'You lost! The correct answer is {answer}.';
@@ -37,6 +41,7 @@ module.exports = class Trivia extends events {
     if (typeof options.embed.description !== 'string') throw new TypeError('INVALID_EMBED: embed description must be a string.');
     if (typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
     if (typeof options.difficulty !== 'string') throw new TypeError('INVALID_DIFICULTY: Difficulty option must be a string.');
+    if (typeof options.category !== 'number') throw new TypeError('INVALID_CATEGORY: Category option must be a number.');
     if (typeof options.winMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Win message option must be a string.');
     if (typeof options.loseMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Lose message option must be a string.');
     if (typeof options.errMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Error message option must be a string.');
@@ -45,13 +50,15 @@ module.exports = class Trivia extends events {
     if (typeof options.falseButtonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
     if (!['multiple', 'single'].includes(options.mode)) throw new TypeError('INVALID_MODE: Mode option must be multiple or single.');
     if (!difficulties.includes(options.difficulty)) throw new TypeError('INVALID_DIFFICULTY: Difficulty option must be a easy, medium or hard.');
+    if (!categories.includes(options.category)) throw new TypeError('INVALID_CATEGORY: Category option must be any one of:\nGeneral Knowledge,\nEntertainment: Books,\nEntertainment: Film,\nEntertainment: Music,\nEntertainment: Musicals & Theatres\nEntertainment: Television\nEntertainment: Video Games,\nEntertainment: Board Games,\nScience & Nature,\nScience: Computers,\nScience: Mathematics,\nMythology,\nSports,\nGeography,\nHistory,\nPolitics,\nArt,\nCelebrities,\nAnimals');
     if (options.playerOnlyMessage !== false) {
       if (!options.playerOnlyMessage) options.playerOnlyMessage = 'Only {player} can use these buttons.';
       if (typeof options.playerOnlyMessage !== 'string') throw new TypeError('INVALID_MESSAGE: playerOnly Message option must be a string.');
     }
-
-
+    
+    
     super();
+    options.category = 9 + categories.indexOf(options.category);
     this.options = options;
     this.message = options.message;
     this.selected = null;
@@ -156,7 +163,7 @@ module.exports = class Trivia extends events {
 
   async getTriviaQuestion() {
     const questionMode = this.options.mode.replace('single', 'boolean');
-    const url = `https://opentdb.com/api.php?amount=1&type=${questionMode}&difficulty=${this.options.difficulty}`;
+    const url = `https://opentdb.com/api.php?amount=1&type=${questionMode}&difficulty=${this.options.difficulty}&category=${this.options.category}`;
     const result = await fetch(url).then(res => res.json()).then(res => res.results[0]).catch(e => {});
     if (!result) return false;
 
