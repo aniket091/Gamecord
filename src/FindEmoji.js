@@ -21,6 +21,7 @@ module.exports = class FindEmoji extends events {
     if (!options.timeoutTime) options.timeoutTime = 60000;
     if (!options.hideEmojiTime) options.hideEmojiTime = 5000;
     if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if (options.emojis && option.emojis.length < 8) throw new TypeError('LESS_EMOJIS: The number of emojis must be 8 or greater.');
     if (!options.emojis) options.emojis = ['🍉', '🍇', '🍊', '🍋', '🥭', '🍎', '🍏', '🥝', '🥥', '🍓', '🍒'];
 
     if (!options.winMessage) options.winMessage = 'You won! You selected the correct emoji. {emoji}';
