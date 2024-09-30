@@ -169,6 +169,7 @@ module.exports = class Wordle extends events {
     const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
+    .setDescription(this.options.embed.description)
     .setImage('attachment://wordle.png')
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
@@ -202,6 +203,7 @@ module.exports = class Wordle extends events {
     const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
+    .setDescription(this.options.embed.description)
     .setImage('attachment://wordle.png')
     .addFields({ name: 'Game Over', value: GameOverMessage.replace('{word}', this.word) })
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL() });
