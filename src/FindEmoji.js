@@ -2,7 +2,6 @@ const { EmbedBuilder, ActionRowBuilder } = require('discord.js');
 const { disableButtons, shuffleArray, formatMessage, ButtonBuilder } = require('../utils/utils');
 const events = require('events');
 
-
 module.exports = class FindEmoji extends events {  
   constructor(options = {}) {
 
@@ -56,8 +55,8 @@ module.exports = class FindEmoji extends events {
 
 
   async sendMessage(content) {
-    if (this.options.isSlashGame) return await this.message.editReply(content);
-    else return await this.message.channel.send(content);
+    if (this.options.isSlashGame) return await this.message.editReply(content).catch(e => {});
+    else return await this.message.channel.send(content).catch(e => {});
   }
 
 
@@ -78,31 +77,33 @@ module.exports = class FindEmoji extends events {
     .setDescription(this.options.embed.description)
     .setFooter({ text: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
     const msg = await this.sendMessage({ embeds: [embed], components: this.getComponents(true) });
+    const collector = msg.createMessageComponentCollector({ idle: this.options.hideEmojiTime });
 
+    collector.on('end', async (_, reason) => {
+      if (reason === 'messageDelete' || reason === 'channelDelete') return;
 
-    setTimeout(async () => {
-      embed.setDescription(this.options.embed.findDescription.replace('{emoji}', this.emoji));
-      await msg.edit({ embeds: [embed], components: this.getComponents(false) });
-      const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
-
-
-      collector.on('collect', async (btn) => {
-        await btn.deferUpdate().catch(e => {});
-        if (btn.user.id !== this.message.author.id) {
-          if (this.options.playerOnlyMessage) btn.followUp({ content: formatMessage(this.options, 'playerOnlyMessage'), ephemeral: true });
-          return;
-        }
-        this.selected = this.emojis[parseInt(btn.customId.split('_')[1])];
-        return collector.stop();
-      })
-
-
-      collector.on('end', async (_, reason) => {
-        if (reason === 'idle' || reason === 'user') return this.gameOver(msg, (reason === 'user'));
-      })
-    }, this.options.hideEmojiTime);
+      if (reason === 'idle') {
+        embed.setDescription(this.options.embed.findDescription.replace('{emoji}', this.emoji));
+        await msg.edit({ embeds: [embed], components: this.getComponents(false) });
+        const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
+  
+        collector.on('collect', async (btn) => {
+          await btn.deferUpdate().catch(e => {});
+          if (btn.user.id !== this.message.author.id) {
+            if (this.options.playerOnlyMessage) btn.followUp({ content: formatMessage(this.options, 'playerOnlyMessage'), ephemeral: true });
+            return;
+          }
+          this.selected = this.emojis[parseInt(btn.customId.split('_')[1])];
+          return collector.stop();
+        })
+  
+  
+        collector.on('end', async (_, reason) => {
+          if (reason === 'idle' || reason === 'user') return this.gameOver(msg, (reason === 'user'));
+        })
+      }
+    })
   }
-
 
   gameOver(msg, result) {
     const FindEmojiGame = { player: this.message.author, selectedEmoji: this.selected, correctEmoji: this.emoji };
