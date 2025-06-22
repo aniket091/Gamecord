@@ -150,8 +150,8 @@ module.exports = class Connect4 extends approve {
 
 
       if (block.y === 0) {
-        const components = msg.components[(column > 3) ? 1 : 0].components;
-        if (column > 3) components[column % 4] = ButtonBuilder.from(components[column % 4]).setDisabled(true);
+        const components = msg.components[(column > 4) ? 1 : 0].components;
+        if (column > 4) components[column % 5] = ButtonBuilder.from(components[column % 5]).setDisabled(true);
         else components[column] = ButtonBuilder.from(components[column]).setDisabled(true);
       }
 
